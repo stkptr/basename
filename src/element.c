@@ -303,6 +303,58 @@ int element_length(enum ELEMENT_VALUE ev) {
     return '\0';
 }
 
+char short_code(enum ELEMENT_VALUE ev) {
+    switch (ev) {
+        RET(ELEMENT_VALUE_NEGA, '-');
+        RET(ELEMENT_VALUE_VOT, '/');
+        //
+        RET(ELEMENT_VALUE_NULLARY, '0');
+        RET(ELEMENT_VALUE_UNARY, '1');
+            RET(ELEMENT_VALUE_UN, '+');
+            RET(ELEMENT_VALUE_HEN, '(');
+            RET(ELEMENT_VALUE_SNA, ')');
+        RET(ELEMENT_VALUE_BINARY, 'b');
+            RET(ELEMENT_VALUE_BI, '2');
+        RET(ELEMENT_VALUE_TRINARY, 't');
+            RET(ELEMENT_VALUE_TRI, '3');
+        RET(ELEMENT_VALUE_QUATERNARY, 'q');
+            RET(ELEMENT_VALUE_TETRA, '4');
+        RET(ELEMENT_VALUE_QUINARY, 'Q');
+            RET(ELEMENT_VALUE_PENTA, '5');
+        RET(ELEMENT_VALUE_SEXIMAL, 's');
+            RET(ELEMENT_VALUE_HEXA, '6');
+        RET(ELEMENT_VALUE_SEPTIMAL, 'S');
+            RET(ELEMENT_VALUE_HEPTA, '7');
+        RET(ELEMENT_VALUE_OCTAL, 'o');
+            RET(ELEMENT_VALUE_OCTO, '8');
+        RET(ELEMENT_VALUE_NONARY, 'n');
+            RET(ELEMENT_VALUE_ENNA, '9');
+        RET(ELEMENT_VALUE_DECIMAL, 'd');
+            RET(ELEMENT_VALUE_GESIMAL, 'A');
+        RET(ELEMENT_VALUE_ELEVENARY, 'e');
+            RET(ELEMENT_VALUE_LEVA, 'B');
+        RET(ELEMENT_VALUE_DOZENAL, 'z');
+            RET(ELEMENT_VALUE_DOZA, 'C');
+        RET(ELEMENT_VALUE_BAKERS_DOZENAL, 'Z');
+            RET(ELEMENT_VALUE_KERS_DOZENAL, 'D');
+        //
+        RET(ELEMENT_VALUE_HEX, 'h');
+            RET(ELEMENT_VALUE_TESSER, 'F');
+        RET(ELEMENT_VALUE_SUBOPTIMAL, 'm');
+            RET(ELEMENT_VALUE_MAL, 'M');
+        //
+        RET(ELEMENT_VALUE_VIGESIMAL, 'v');
+            RET(ELEMENT_VALUE_ICOSI, 'I');
+        //
+        RET(ELEMENT_VALUE_NIFTIMAL, 'f');
+            RET(ELEMENT_VALUE_FETA, 'T');
+        //
+        RET(ELEMENT_VALUE_CENTESIMAL, 'c');
+            RET(ELEMENT_VALUE_HECTO, 'Y');
+        default: return '\0';
+    }
+}
+
 #undef RET
 
 enum ELEMENT_VALUE pair_favor(enum ELEMENT_VALUE first, enum ELEMENT_VALUE last) {

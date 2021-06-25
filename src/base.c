@@ -212,6 +212,21 @@ char *elist_name(struct element_list_s *el) {
 }
 
 
+// Make a shortened code for a base
+// User must free
+char *elist_shortcode(struct element_list_s *el, int has_favors) {
+    int length = el->element_count / (has_favors + 1);
+    char *str = calloc(length + 1, sizeof(char));
+    int si = 0;
+
+    for (int i = 0; i < el->element_count; i += has_favors + 1) {
+        str[si++] = short_code(el->elements[i]);
+    }
+
+    return str;
+}
+
+
 void test_elist() {
     enum ELEMENT_VALUE ev[] = {
         ELEMENT_VALUE_CENTESIMAL,
@@ -295,25 +310,37 @@ void construct(struct element_list_s *el, int n, int is_final, int depth) {
 
 
 void test_construct() {
-    struct element_list_s *el = elist_new();
-    char *str;
+    int values[] = {1, 2, 81, 9023, -5758, 8891, 8213};
 
-    construct(el, -5758, 1, 0);
+    for (int vi = 0; vi < sizeof(values) / sizeof(int); vi++) {
+        struct element_list_s *el = elist_new();
+        char *str;
 
-    str = elist_str(el);
+        construct(el, values[vi], 1, 0);
 
-    for (int i = 0; i < el->element_count; i++) {
-        enum ELEMENT_VALUE ev = el->elements[i];
-        const char *s = element_as_string(ev);
-        if (!element_value_is_preference(ev)) {
-            printf("%s ", s);
+        printf("%i\n", values[vi]);
+
+        str = elist_str(el);
+
+        printf("  Roots: ");
+
+        for (int i = 0; i < el->element_count; i++) {
+            enum ELEMENT_VALUE ev = el->elements[i];
+            const char *s = element_as_string(ev);
+            if (!element_value_is_preference(ev)) {
+                printf("%s ", s);
+            }
         }
+
+        printf("\n");
+
+        char *shortcode = elist_shortcode(el, 1);
+        printf("  Shortcode: %s\n", shortcode);
+        free(shortcode);
+
+        printf("  Numeric: %s\n", str);
+        elist_free(el);
     }
-
-    printf("\n");
-
-    printf("%s\n", str);
-    elist_free(el);
 }
 
 

@@ -67,4 +67,7 @@ enum ELEMENT_VALUE pair_favor(enum ELEMENT_VALUE first, enum ELEMENT_VALUE last)
 // Returns the length of the string representation of ev
 int element_length(enum ELEMENT_VALUE ev);
 
+// Returns a single character for an element value, '\0' if there isn't a valid one
+char short_code(enum ELEMENT_VALUE ev);
+
 #endif
