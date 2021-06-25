@@ -224,6 +224,12 @@ void construct(struct element_list_s *el, int n, int is_final, int depth) {
         return;
     }
 
+    else if (n < 0) {
+        elist_append(el, ELEMENT_VALUE_NEGA);
+        construct(el, n * -1, 1, depth + 1);
+        return;
+    }
+
     s = smart_factor(n);   // needs a better factorizer
 
     //printf("Factored %i as %i * %i\n", n, s.lower, s.upper);
@@ -254,7 +260,7 @@ void test_construct() {
     struct element_list_s *el = elist_new();
     char *str;
 
-    construct(el, 5758, 1, 0);
+    construct(el, -5758, 1, 0);
 
     str = elist_str(el);
 
