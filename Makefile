@@ -1,7 +1,9 @@
+CFLAGS = -Wall -Wpedantic
+
 all: base
 
 base: src/base.c src/element.c
-	$(CC) -o $@ $^ -lm
+	$(CC) -o $@ $^ $(CFLAGS) -lm
 
 clean:
 	rm -f base
