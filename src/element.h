@@ -64,4 +64,7 @@ char element_begin_char(enum ELEMENT_VALUE ev);
 // pair_favor(ELEMENT_VALUE_OCTO, ELEMENT_VALUE_ICOSI) -> ELEMENT_VALUE_PREFER_LAST
 enum ELEMENT_VALUE pair_favor(enum ELEMENT_VALUE first, enum ELEMENT_VALUE last);
 
+// Returns the length of the string representation of ev
+int element_length(enum ELEMENT_VALUE ev);
+
 #endif

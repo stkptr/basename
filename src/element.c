@@ -241,6 +241,68 @@ char element_begin_char(enum ELEMENT_VALUE ev) {
     return '\0';
 }
 
+int element_length(enum ELEMENT_VALUE ev) {
+    switch (ev) {
+        RET(ELEMENT_VALUE_INVALID, 7);
+        //
+        RET(ELEMENT_VALUE_NEGA, 4);
+        RET(ELEMENT_VALUE_VOT, 3);
+        //
+        RET(ELEMENT_VALUE_NULLARY, 7);
+        RET(ELEMENT_VALUE_UNARY, 5);
+            RET(ELEMENT_VALUE_UN, 2);
+            RET(ELEMENT_VALUE_HEN, 3);
+            RET(ELEMENT_VALUE_SNA, 3);
+        RET(ELEMENT_VALUE_BINARY, 6);
+            RET(ELEMENT_VALUE_BI, 2);
+        RET(ELEMENT_VALUE_TRINARY, 7);
+            RET(ELEMENT_VALUE_TRI, 3);
+        RET(ELEMENT_VALUE_QUATERNARY, 10);
+            RET(ELEMENT_VALUE_TETRA, 5);
+        RET(ELEMENT_VALUE_QUINARY, 7);
+            RET(ELEMENT_VALUE_PENTA, 5);
+        RET(ELEMENT_VALUE_SEXIMAL, 7);
+            RET(ELEMENT_VALUE_HEXA, 4);
+        RET(ELEMENT_VALUE_SEPTIMAL, 8);
+            RET(ELEMENT_VALUE_HEPTA, 5);
+        RET(ELEMENT_VALUE_OCTAL, 5);
+            RET(ELEMENT_VALUE_OCTO, 4);
+        RET(ELEMENT_VALUE_NONARY, 6);
+            RET(ELEMENT_VALUE_ENNA, 4);
+        RET(ELEMENT_VALUE_DECIMAL, 7);
+            RET(ELEMENT_VALUE_GESIMAL, 7);
+        RET(ELEMENT_VALUE_ELEVENARY, 9);
+            RET(ELEMENT_VALUE_LEVA, 4);
+        RET(ELEMENT_VALUE_DOZENAL, 7);
+            RET(ELEMENT_VALUE_DOZA, 4);
+        RET(ELEMENT_VALUE_BAKERS_DOZENAL, 15);
+            RET(ELEMENT_VALUE_KERS_DOZENAL, 13);
+        //
+        RET(ELEMENT_VALUE_HEX, 3);
+            RET(ELEMENT_VALUE_TESSER, 6);
+        RET(ELEMENT_VALUE_SUBOPTIMAL, 10);
+            RET(ELEMENT_VALUE_MAL, 3);
+        //
+        RET(ELEMENT_VALUE_VIGESIMAL, 9);
+            RET(ELEMENT_VALUE_ICOSI, 5);
+        //
+        RET(ELEMENT_VALUE_NIFTIMAL, 8);
+            RET(ELEMENT_VALUE_FETA, 4);
+        //
+        RET(ELEMENT_VALUE_CENTESIMAL, 10);
+            RET(ELEMENT_VALUE_HECTO, 5);
+        //
+        RET(ELEMENT_VALUE_NARY, 4);
+            RET(ELEMENT_VALUE_ARY, 3);
+        RET(ELEMENT_VALUE_IMAL, 4);
+            RET(ELEMENT_VALUE_AL, 2);
+        //
+        default: return '\0';
+    }
+
+    return '\0';
+}
+
 #undef RET
 
 enum ELEMENT_VALUE pair_favor(enum ELEMENT_VALUE first, enum ELEMENT_VALUE last) {
