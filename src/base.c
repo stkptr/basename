@@ -5,11 +5,6 @@
 
 #include "element.h"
 
-// https://www.youtube.com/watch?v=7OEF3JD-jYo
-
-
-// hecto- is exceptional
-// as is feta-
 
 struct pair_s {
     int lower;
@@ -17,10 +12,13 @@ struct pair_s {
 };
 
 
+// Checks if n is an integer
 int integral(double n) {
     return ceil(n) == n;
 }
 
+
+// Swap the values in the pair if they are out of order
 struct pair_s rearrange(struct pair_s s) {
     if (s.lower > s.upper) {
         int t = s.lower;
@@ -31,7 +29,7 @@ struct pair_s rearrange(struct pair_s s) {
     return s;
 }
 
-// returns the closest factors for n
+// Returns the closest factors for n
 struct pair_s factorize(int n) {
     // no integer n has a divisor that is ceil(sqrt(n))
     // and all divisors are obtained from floor(sqrt(n)) or less
@@ -53,6 +51,7 @@ struct pair_s factorize(int n) {
     return s;
 }
 
+
 void test_factor() {
     for (int i = 1; i < 25; i++) {
         struct pair_s s = factorize(i);
@@ -61,8 +60,7 @@ void test_factor() {
 }
 
 
-
-
+// The bases that are single roots
 int is_base_case(int n) {
     switch (n) {
         case 0:
@@ -95,6 +93,7 @@ int is_base_case(int n) {
 }
 
 
+// Holds a list of ELEMENT_VALUEs
 struct element_list_s {
     int element_count;
     int element_begin;
@@ -103,6 +102,7 @@ struct element_list_s {
 };
 
 
+// Constructor
 struct element_list_s *elist_new() {
     struct element_list_s *el = malloc(sizeof(struct element_list_s));
     el->element_count = 0;
@@ -112,12 +112,15 @@ struct element_list_s *elist_new() {
     return el;
 }
 
+
+// Free an elist
 void elist_free(struct element_list_s *el) {
     free(el->elements);
     free(el);
 }
 
 
+// Automatically resize an elist if necessary
 void elist_resize(struct element_list_s *el) {
     // expand forward
     if (el->element_begin + el->element_count == el->box_size) {
@@ -136,12 +139,14 @@ void elist_resize(struct element_list_s *el) {
 }
 
 
+// Append/push a value to an elist
 void elist_append(struct element_list_s *el, enum ELEMENT_VALUE value) {
     elist_resize(el);
     el->elements[el->element_begin + el->element_count++] = value;
 }
 
 
+// Append while automatically adding the favor direction
 void elist_append_with_favor(struct element_list_s *el, enum ELEMENT_VALUE value) {
     if (el->element_count) {
         enum ELEMENT_VALUE previous = el->elements[el->element_begin + el->element_count - 1];
@@ -151,6 +156,7 @@ void elist_append_with_favor(struct element_list_s *el, enum ELEMENT_VALUE value
 }
 
 
+// Prepend to an elist
 void elist_prepend(struct element_list_s *el, enum ELEMENT_VALUE value) {
     elist_resize(el);
     el->element_count++;
@@ -159,6 +165,9 @@ void elist_prepend(struct element_list_s *el, enum ELEMENT_VALUE value) {
 
 #define max(n, m) (((n) > (m)) ? (n) : (m))
 
+// Create a compact representation for a elist
+// in the form: 1_8_2_7 for unoctobiseptimal (113)
+// User must free
 char *elist_str(struct element_list_s *el) {
     size_t count = el->element_count * 4 + 1;
     char *str = calloc(count, sizeof(char));
@@ -177,108 +186,8 @@ char *elist_str(struct element_list_s *el) {
 }
 
 
-void test_elist() {
-    enum ELEMENT_VALUE ev[] = {
-        ELEMENT_VALUE_CENTESIMAL,
-        ELEMENT_VALUE_NULLARY,
-        ELEMENT_VALUE_UN,
-        ELEMENT_VALUE_INVALID,
-        ELEMENT_VALUE_SEXIMAL,
-        ELEMENT_VALUE_VOT,
-        ELEMENT_VALUE_SUBOPTIMAL
-    };
-    struct element_list_s *el = elist_new();
-    char *str;
-
-    for (int i = 0; i < sizeof(ev) / sizeof(enum ELEMENT_VALUE); i++) {
-        elist_append(el, ev[i]);
-    }
-
-    str = elist_str(el);
-
-    printf("Elist: %s\n", str);
-
-    free(str);
-    elist_free(el);
-}
-
-
-struct pair_s smart_factor(int n) {
-    struct pair_s s;
-    if (n % 100 == 0) {
-        s.lower = n / 100;
-        s.upper = 100;
-        s = rearrange(s);
-        return s;
-    }
-
-    return factorize(n);
-}
-
-
-void construct(struct element_list_s *el, int n, int is_final, int depth) {
-    struct pair_s s;
-
-    if (is_base_case(n)) {
-        elist_append_with_favor(el, base_as_element(n, is_final, !depth));
-        return;
-    }
-
-    else if (n < 0) {
-        elist_append(el, ELEMENT_VALUE_NEGA);
-        construct(el, n * -1, 1, depth + 1);
-        return;
-    }
-
-    s = smart_factor(n);   // needs a better factorizer
-
-    //printf("Factored %i as %i * %i\n", n, s.lower, s.upper);
-
-    // special case: primes
-    if (s.lower == 1) {
-        if (is_final) {
-            elist_append_with_favor(el, ELEMENT_VALUE_UN);
-        } else {
-            elist_append_with_favor(el, ELEMENT_VALUE_HEN);
-        }
-
-        construct(el, n - 1, is_final, depth + 1);
-
-        if (!is_final) {
-            elist_append_with_favor(el, ELEMENT_VALUE_SNA);
-        }
-
-        return;
-    }
-
-    construct(el, s.lower, 0, depth + 1);
-    construct(el, s.upper, is_final, depth + 1);
-}
-
-
-void test_construct() {
-    struct element_list_s *el = elist_new();
-    char *str;
-
-    construct(el, -5758, 1, 0);
-
-    str = elist_str(el);
-
-    for (int i = 0; i < el->element_count; i++) {
-        enum ELEMENT_VALUE ev = el->elements[el->element_begin + i];
-        const char *s = element_as_string(ev);
-        if (!element_value_is_preference(ev)) {
-            printf("%s ", s);
-        }
-    }
-
-    printf("\n");
-
-    printf("%s\n", str);
-    elist_free(el);
-}
-
-
+// Names the elist el according to the vowel ommitting rules
+// el MUST have the preference values between each element
 char *elist_name(struct element_list_s *el) {
     // maximum medial element length is 6, except for bakers which is 13 (nice)
     // divide by two to account for the preferences
@@ -318,6 +227,111 @@ char *elist_name(struct element_list_s *el) {
     }
 
     return str;
+}
+
+
+void test_elist() {
+    enum ELEMENT_VALUE ev[] = {
+        ELEMENT_VALUE_CENTESIMAL,
+        ELEMENT_VALUE_NULLARY,
+        ELEMENT_VALUE_UN,
+        ELEMENT_VALUE_INVALID,
+        ELEMENT_VALUE_SEXIMAL,
+        ELEMENT_VALUE_VOT,
+        ELEMENT_VALUE_SUBOPTIMAL
+    };
+    struct element_list_s *el = elist_new();
+    char *str;
+
+    for (int i = 0; i < sizeof(ev) / sizeof(enum ELEMENT_VALUE); i++) {
+        elist_append(el, ev[i]);
+    }
+
+    str = elist_str(el);
+
+    printf("Elist: %s\n", str);
+
+    free(str);
+    elist_free(el);
+}
+
+
+struct pair_s smart_factor(int n) {
+    struct pair_s s;
+    if (n % 100 == 0) {
+        s.lower = n / 100;
+        s.upper = 100;
+        s = rearrange(s);
+        return s;
+    }
+    
+    // considering that biniftimal (72) is canonically octononary
+    // checking for divisibility by 36 isn't needed
+
+    return factorize(n);
+}
+
+
+void construct(struct element_list_s *el, int n, int is_final, int depth) {
+    struct pair_s s;
+
+    if (is_base_case(n)) {
+        elist_append_with_favor(el, base_as_element(n, is_final, !depth));
+        return;
+    }
+
+    // negative numbers
+    else if (n < 0) {
+        elist_append(el, ELEMENT_VALUE_NEGA);
+        construct(el, n * -1, 1, depth + 1);
+        return;
+    }
+
+    s = smart_factor(n);
+
+    // Primes (un + base)
+    if (s.lower == 1) {
+        if (is_final) {
+            elist_append_with_favor(el, ELEMENT_VALUE_UN);
+        } else {
+            elist_append_with_favor(el, ELEMENT_VALUE_HEN);
+        }
+
+        construct(el, n - 1, is_final, depth + 1);
+
+        if (!is_final) {
+            elist_append_with_favor(el, ELEMENT_VALUE_SNA);
+        }
+
+        return;
+    }
+
+    // Fork the tree
+    construct(el, s.lower, 0, depth + 1);
+    construct(el, s.upper, is_final, depth + 1);
+}
+
+
+void test_construct() {
+    struct element_list_s *el = elist_new();
+    char *str;
+
+    construct(el, -5758, 1, 0);
+
+    str = elist_str(el);
+
+    for (int i = 0; i < el->element_count; i++) {
+        enum ELEMENT_VALUE ev = el->elements[el->element_begin + i];
+        const char *s = element_as_string(ev);
+        if (!element_value_is_preference(ev)) {
+            printf("%s ", s);
+        }
+    }
+
+    printf("\n");
+
+    printf("%s\n", str);
+    elist_free(el);
 }
 
 
