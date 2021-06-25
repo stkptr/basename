@@ -160,7 +160,7 @@ void elist_prepend(struct element_list_s *el, enum ELEMENT_VALUE value) {
 #define max(n, m) (((n) > (m)) ? (n) : (m))
 
 char *elist_str(struct element_list_s *el) {
-    size_t count = el->element_count * 4;
+    size_t count = el->element_count * 4 + 1;
     char *str = calloc(count, sizeof(char));
     int written = 0;
     int offset = 0;
@@ -279,6 +279,64 @@ void test_construct() {
 }
 
 
-int main() {
-    test_construct();
+char *elist_name(struct element_list_s *el) {
+    // maximum medial element length is 6, except for bakers which is 13 (nice)
+    // divide by two to account for the preferences
+    // maximum final is 10, except for bakers which is 15
+    // +1 for the nul, of course
+    int length = (el->element_count / 2) * 13 + 15 + 1;
+    char *str = calloc(length, sizeof(char));
+    int offset = 0;
+
+    for (int i = 0; i < el->element_count; i+= 2) {
+        enum ELEMENT_VALUE previous, current, next;
+        int keep_first = 1, keep_last = 1;
+
+        current = el->elements[el->element_begin + i];
+
+        if (i) {
+            previous = el->elements[el->element_begin + i - 1];
+            if (previous == ELEMENT_VALUE_PREFER_FIRST) {
+                keep_first = 0;
+            }
+        }
+
+        if (i < el->element_count - 1) {
+            next = el->elements[el->element_begin + i + 1];
+            if (next == ELEMENT_VALUE_PREFER_LAST) {
+                keep_last = 0;
+            }
+        }
+
+        int elength = element_length(current);
+        const char *cstr = element_as_string(current);
+        int start = (keep_first) ? 0 : 1;
+        int end = elength - ((keep_last) ? 0 : 1);
+        for (int si = start; si < end; si++) {
+            str[offset++] = cstr[si];
+        }
+    }
+
+    return str;
+}
+
+
+// Name the integral base n
+// User must free
+char *name(int n) {
+    struct element_list_s *el = elist_new();
+    char *str;
+    construct(el, n, 1, 0);
+    str = elist_name(el);
+    elist_free(el);
+    return str;
+}
+
+
+int main(int argc, char *argv[]) {
+    for (int i = 1; i < argc; i++) {
+        char *str = name(atoi(argv[i]));
+        printf("%s\n", str);
+        free(str);
+    }
 }
