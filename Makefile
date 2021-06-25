@@ -1,6 +1,6 @@
 all: base
 
-base: base.c element.c
+base: src/base.c src/element.c
 	$(CC) -o $@ $^ -lm
 
 clean:
