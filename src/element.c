@@ -49,67 +49,67 @@ enum ELEMENT_VALUE base_as_element(int n, int is_final, int is_bare) {
 #undef BARE
 
 
-#define RET(match, value) case (match): return (value)
+#define RET(match, value) case (ELEMENT_VALUE_ ## match): return (value)
 
 const char *element_as_string(enum ELEMENT_VALUE ev) {
     switch (ev) {
-        RET(ELEMENT_VALUE_INVALID, "invalid");
+        RET(INVALID, "invalid");
         //
-        RET(ELEMENT_VALUE_NEGA, "nega");
-        RET(ELEMENT_VALUE_VOT, "vot");
+        RET(NEGA, "nega");
+        RET(VOT, "vot");
         //
-        RET(ELEMENT_VALUE_NULLARY, "nullary");
-        RET(ELEMENT_VALUE_UNARY, "unary");
-            RET(ELEMENT_VALUE_UN, "un");
-            RET(ELEMENT_VALUE_HEN, "hen");
-            RET(ELEMENT_VALUE_SNA, "sna");
-        RET(ELEMENT_VALUE_BINARY, "binary");
-            RET(ELEMENT_VALUE_BI, "bi");
-        RET(ELEMENT_VALUE_TRINARY, "trinary");
-            RET(ELEMENT_VALUE_TRI, "tri");
-        RET(ELEMENT_VALUE_QUATERNARY, "quaternary");
-            RET(ELEMENT_VALUE_TETRA, "tetra");
-        RET(ELEMENT_VALUE_QUINARY, "quinary");
-            RET(ELEMENT_VALUE_PENTA, "penta");
-        RET(ELEMENT_VALUE_SEXIMAL, "seximal");
-            RET(ELEMENT_VALUE_HEXA, "hexa");
-        RET(ELEMENT_VALUE_SEPTIMAL, "septimal");
-            RET(ELEMENT_VALUE_HEPTA, "hepta");
-        RET(ELEMENT_VALUE_OCTAL, "octal");
-            RET(ELEMENT_VALUE_OCTO, "octo");
-        RET(ELEMENT_VALUE_NONARY, "nonary");
-            RET(ELEMENT_VALUE_ENNA, "enna");
-        RET(ELEMENT_VALUE_DECIMAL, "decimal");
-            RET(ELEMENT_VALUE_GESIMAL, "gesimal");
-        RET(ELEMENT_VALUE_ELEVENARY, "elevenary");
-            RET(ELEMENT_VALUE_LEVA, "leva");
-        RET(ELEMENT_VALUE_DOZENAL, "dozenal");
-            RET(ELEMENT_VALUE_DOZA, "doza");
-        RET(ELEMENT_VALUE_BAKERS_DOZENAL, "baker's dozenal");
-            RET(ELEMENT_VALUE_KERS_DOZENAL, "ker's dozenal");
+        RET(NULLARY, "nullary");
+        RET(UNARY, "unary");
+            RET(UN, "un");
+            RET(HEN, "hen");
+            RET(SNA, "sna");
+        RET(BINARY, "binary");
+            RET(BI, "bi");
+        RET(TRINARY, "trinary");
+            RET(TRI, "tri");
+        RET(QUATERNARY, "quaternary");
+            RET(TETRA, "tetra");
+        RET(QUINARY, "quinary");
+            RET(PENTA, "penta");
+        RET(SEXIMAL, "seximal");
+            RET(HEXA, "hexa");
+        RET(SEPTIMAL, "septimal");
+            RET(HEPTA, "hepta");
+        RET(OCTAL, "octal");
+            RET(OCTO, "octo");
+        RET(NONARY, "nonary");
+            RET(ENNA, "enna");
+        RET(DECIMAL, "decimal");
+            RET(GESIMAL, "gesimal");
+        RET(ELEVENARY, "elevenary");
+            RET(LEVA, "leva");
+        RET(DOZENAL, "dozenal");
+            RET(DOZA, "doza");
+        RET(BAKERS_DOZENAL, "baker's dozenal");
+            RET(KERS_DOZENAL, "ker's dozenal");
         //
-        RET(ELEMENT_VALUE_HEX, "hex");
-            RET(ELEMENT_VALUE_TESSER, "tesser");
-        RET(ELEMENT_VALUE_SUBOPTIMAL, "suboptimal");
-            RET(ELEMENT_VALUE_MAL, "mal");
+        RET(HEX, "hex");
+            RET(TESSER, "tesser");
+        RET(SUBOPTIMAL, "suboptimal");
+            RET(MAL, "mal");
         //
-        RET(ELEMENT_VALUE_VIGESIMAL, "vigesimal");
-            RET(ELEMENT_VALUE_ICOSI, "icosi");
+        RET(VIGESIMAL, "vigesimal");
+            RET(ICOSI, "icosi");
         //
-        RET(ELEMENT_VALUE_NIFTIMAL, "niftimal");
-            RET(ELEMENT_VALUE_FETA, "feta");
+        RET(NIFTIMAL, "niftimal");
+            RET(FETA, "feta");
         //
-        RET(ELEMENT_VALUE_CENTESIMAL, "centesimal");
-            RET(ELEMENT_VALUE_HECTO, "hecto");
+        RET(CENTESIMAL, "centesimal");
+            RET(HECTO, "hecto");
         //
-        RET(ELEMENT_VALUE_NARY, "nary");
-            RET(ELEMENT_VALUE_ARY, "ary");
-        RET(ELEMENT_VALUE_IMAL, "imal");
-            RET(ELEMENT_VALUE_AL, "al");
+        RET(NARY, "nary");
+            RET(ARY, "ary");
+        RET(IMAL, "imal");
+            RET(AL, "al");
         //
-        RET(ELEMENT_VALUE_PREFER_NEITHER, "0");
-        RET(ELEMENT_VALUE_PREFER_FIRST, "<-");
-        RET(ELEMENT_VALUE_PREFER_LAST, "->");
+        RET(PREFER_NEITHER, "0");
+        RET(PREFER_FIRST, "<-");
+        RET(PREFER_LAST, "->");
     }
 
     return "";
@@ -118,59 +118,39 @@ const char *element_as_string(enum ELEMENT_VALUE ev) {
 
 char element_final_char(enum ELEMENT_VALUE ev) {
     switch (ev) {
-        RET(ELEMENT_VALUE_INVALID, 'd');
+        RET(INVALID, 'd');
         //
-        RET(ELEMENT_VALUE_NEGA, 'a');
-        RET(ELEMENT_VALUE_VOT, 't');
+        RET(NEGA, 'a');
+        RET(VOT, 't');
         //
-        RET(ELEMENT_VALUE_NULLARY, 'y');
-        RET(ELEMENT_VALUE_UNARY, 'y');
-            RET(ELEMENT_VALUE_UN, 'n');
-            RET(ELEMENT_VALUE_HEN, 'n');
-            RET(ELEMENT_VALUE_SNA, 'a');
-        RET(ELEMENT_VALUE_BINARY, 'y');
-            RET(ELEMENT_VALUE_BI, 'i');
-        RET(ELEMENT_VALUE_TRINARY, 'y');
-            RET(ELEMENT_VALUE_TRI, 'i');
-        RET(ELEMENT_VALUE_QUATERNARY, 'y');
-            RET(ELEMENT_VALUE_TETRA, 'a');
-        RET(ELEMENT_VALUE_QUINARY, 'y');
-            RET(ELEMENT_VALUE_PENTA, 'a');
-        RET(ELEMENT_VALUE_SEXIMAL, 'l');
-            RET(ELEMENT_VALUE_HEXA, 'a');
-        RET(ELEMENT_VALUE_SEPTIMAL, 'l');
-            RET(ELEMENT_VALUE_HEPTA, 'a');
-        RET(ELEMENT_VALUE_OCTAL, 'l');
-            RET(ELEMENT_VALUE_OCTO, 'o');
-        RET(ELEMENT_VALUE_NONARY, 'y');
-            RET(ELEMENT_VALUE_ENNA, 'a');
-        RET(ELEMENT_VALUE_DECIMAL, 'l');
-            RET(ELEMENT_VALUE_GESIMAL, 'l');
-        RET(ELEMENT_VALUE_ELEVENARY, 'y');
-            RET(ELEMENT_VALUE_LEVA, 'a');
-        RET(ELEMENT_VALUE_DOZENAL, 'l');
-            RET(ELEMENT_VALUE_DOZA, 'a');
-        RET(ELEMENT_VALUE_BAKERS_DOZENAL, 'l');
-            RET(ELEMENT_VALUE_KERS_DOZENAL, 'l');
+        RET(NULLARY, 'y');
+        RET(UNARY, 'y');        RET(UN, 'n');
+            RET(HEN, 'n');
+            RET(SNA, 'a');
+        RET(BINARY, 'y');       RET(BI, 'i');
+        RET(TRINARY, 'y');      RET(TRI, 'i');
+        RET(QUATERNARY, 'y');   RET(TETRA, 'a');
+        RET(QUINARY, 'y');      RET(PENTA, 'a');
+        RET(SEXIMAL, 'l');      RET(HEXA, 'a');
+        RET(SEPTIMAL, 'l');     RET(HEPTA, 'a');
+        RET(OCTAL, 'l');        RET(OCTO, 'o');
+        RET(NONARY, 'y');       RET(ENNA, 'a');
+        RET(DECIMAL, 'l');      RET(GESIMAL, 'l');
+        RET(ELEVENARY, 'y');    RET(LEVA, 'a');
+        RET(DOZENAL, 'l');      RET(DOZA, 'a');
+        RET(BAKERS_DOZENAL, 'l'); RET(KERS_DOZENAL, 'l');
         //
-        RET(ELEMENT_VALUE_HEX, 'x');
-            RET(ELEMENT_VALUE_TESSER, 'r');
-        RET(ELEMENT_VALUE_SUBOPTIMAL, 'l');
-            RET(ELEMENT_VALUE_MAL, 'l');
+        RET(HEX, 'x');          RET(TESSER, 'r');
+        RET(SUBOPTIMAL, 'l');   RET(MAL, 'l');
         //
-        RET(ELEMENT_VALUE_VIGESIMAL, 'l');
-            RET(ELEMENT_VALUE_ICOSI, 'i');
+        RET(VIGESIMAL, 'l');    RET(ICOSI, 'i');
         //
-        RET(ELEMENT_VALUE_NIFTIMAL, 'l');
-            RET(ELEMENT_VALUE_FETA, 'a');
+        RET(NIFTIMAL, 'l');     RET(FETA, 'a');
         //
-        RET(ELEMENT_VALUE_CENTESIMAL, 'l');
-            RET(ELEMENT_VALUE_HECTO, 'o');
+        RET(CENTESIMAL, 'l');   RET(HECTO, 'o');
         //
-        RET(ELEMENT_VALUE_NARY, 'y');
-            RET(ELEMENT_VALUE_ARY, 'y');
-        RET(ELEMENT_VALUE_IMAL, 'l');
-            RET(ELEMENT_VALUE_AL, 'l');
+        RET(NARY, 'y');         RET(ARY, 'y');
+        RET(IMAL, 'l');         RET(AL, 'l');
         //
         default: return '\0';
     }
@@ -181,59 +161,39 @@ char element_final_char(enum ELEMENT_VALUE ev) {
 
 char element_begin_char(enum ELEMENT_VALUE ev) {
     switch (ev) {
-        RET(ELEMENT_VALUE_INVALID, 'i');
+        RET(INVALID, 'i');
         //
-        RET(ELEMENT_VALUE_NEGA, 'n');
-        RET(ELEMENT_VALUE_VOT, 'v');
+        RET(NEGA, 'n');
+        RET(VOT, 'v');
         //
-        RET(ELEMENT_VALUE_NULLARY, 'n');
-        RET(ELEMENT_VALUE_UNARY, 'u');
-            RET(ELEMENT_VALUE_UN, 'u');
-            RET(ELEMENT_VALUE_HEN, 'h');
-            RET(ELEMENT_VALUE_SNA, 's');
-        RET(ELEMENT_VALUE_BINARY, 'b');
-            RET(ELEMENT_VALUE_BI, 'b');
-        RET(ELEMENT_VALUE_TRINARY, 't');
-            RET(ELEMENT_VALUE_TRI, 't');
-        RET(ELEMENT_VALUE_QUATERNARY, 'q');
-            RET(ELEMENT_VALUE_TETRA, 't');
-        RET(ELEMENT_VALUE_QUINARY, 'q');
-            RET(ELEMENT_VALUE_PENTA, 'p');
-        RET(ELEMENT_VALUE_SEXIMAL, 's');
-            RET(ELEMENT_VALUE_HEXA, 'h');
-        RET(ELEMENT_VALUE_SEPTIMAL, 's');
-            RET(ELEMENT_VALUE_HEPTA, 'h');
-        RET(ELEMENT_VALUE_OCTAL, 'o');
-            RET(ELEMENT_VALUE_OCTO, 'o');
-        RET(ELEMENT_VALUE_NONARY, 'n');
-            RET(ELEMENT_VALUE_ENNA, 'e');
-        RET(ELEMENT_VALUE_DECIMAL, 'd');
-            RET(ELEMENT_VALUE_GESIMAL, 'g');
-        RET(ELEMENT_VALUE_ELEVENARY, 'e');
-            RET(ELEMENT_VALUE_LEVA, 'l');
-        RET(ELEMENT_VALUE_DOZENAL, 'd');
-            RET(ELEMENT_VALUE_DOZA, 'd');
-        RET(ELEMENT_VALUE_BAKERS_DOZENAL, 'b');
-            RET(ELEMENT_VALUE_KERS_DOZENAL, 'k');
+        RET(NULLARY, 'n');
+        RET(UNARY, 'u');        RET(UN, 'u');
+            RET(HEN, 'h');
+            RET(SNA, 's');
+        RET(BINARY, 'b');       RET(BI, 'b');
+        RET(TRINARY, 't');      RET(TRI, 't');
+        RET(QUATERNARY, 'q');   RET(TETRA, 't');
+        RET(QUINARY, 'q');      RET(PENTA, 'p');
+        RET(SEXIMAL, 's');      RET(HEXA, 'h');
+        RET(SEPTIMAL, 's');     RET(HEPTA, 'h');
+        RET(OCTAL, 'o');        RET(OCTO, 'o');
+        RET(NONARY, 'n');       RET(ENNA, 'e');
+        RET(DECIMAL, 'd');      RET(GESIMAL, 'g');
+        RET(ELEVENARY, 'e');    RET(LEVA, 'l');
+        RET(DOZENAL, 'd');      RET(DOZA, 'd');
+        RET(BAKERS_DOZENAL, 'b'); RET(KERS_DOZENAL, 'k');
         //
-        RET(ELEMENT_VALUE_HEX, 'h');
-            RET(ELEMENT_VALUE_TESSER, 't');
-        RET(ELEMENT_VALUE_SUBOPTIMAL, 's');
-            RET(ELEMENT_VALUE_MAL, 'm');
+        RET(HEX, 'h');          RET(TESSER, 't');
+        RET(SUBOPTIMAL, 's');   RET(MAL, 'm');
         //
-        RET(ELEMENT_VALUE_VIGESIMAL, 'v');
-            RET(ELEMENT_VALUE_ICOSI, 'i');
+        RET(VIGESIMAL, 'v');    RET(ICOSI, 'i');
         //
-        RET(ELEMENT_VALUE_NIFTIMAL, 'n');
-            RET(ELEMENT_VALUE_FETA, 'f');
+        RET(NIFTIMAL, 'n');     RET(FETA, 'f');
         //
-        RET(ELEMENT_VALUE_CENTESIMAL, 'c');
-            RET(ELEMENT_VALUE_HECTO, 'h');
+        RET(CENTESIMAL, 'c');   RET(HECTO, 'h');
         //
-        RET(ELEMENT_VALUE_NARY, 'n');
-            RET(ELEMENT_VALUE_ARY, 'a');
-        RET(ELEMENT_VALUE_IMAL, 'i');
-            RET(ELEMENT_VALUE_AL, 'a');
+        RET(NARY, 'n');         RET(ARY, 'a');
+        RET(IMAL, 'i');         RET(AL, 'a');
         //
         default: return '\0';
     }
@@ -243,59 +203,39 @@ char element_begin_char(enum ELEMENT_VALUE ev) {
 
 int element_length(enum ELEMENT_VALUE ev) {
     switch (ev) {
-        RET(ELEMENT_VALUE_INVALID, 7);
+        RET(INVALID, 7);
         //
-        RET(ELEMENT_VALUE_NEGA, 4);
-        RET(ELEMENT_VALUE_VOT, 3);
+        RET(NEGA, 4);
+        RET(VOT, 3);
         //
-        RET(ELEMENT_VALUE_NULLARY, 7);
-        RET(ELEMENT_VALUE_UNARY, 5);
-            RET(ELEMENT_VALUE_UN, 2);
-            RET(ELEMENT_VALUE_HEN, 3);
-            RET(ELEMENT_VALUE_SNA, 3);
-        RET(ELEMENT_VALUE_BINARY, 6);
-            RET(ELEMENT_VALUE_BI, 2);
-        RET(ELEMENT_VALUE_TRINARY, 7);
-            RET(ELEMENT_VALUE_TRI, 3);
-        RET(ELEMENT_VALUE_QUATERNARY, 10);
-            RET(ELEMENT_VALUE_TETRA, 5);
-        RET(ELEMENT_VALUE_QUINARY, 7);
-            RET(ELEMENT_VALUE_PENTA, 5);
-        RET(ELEMENT_VALUE_SEXIMAL, 7);
-            RET(ELEMENT_VALUE_HEXA, 4);
-        RET(ELEMENT_VALUE_SEPTIMAL, 8);
-            RET(ELEMENT_VALUE_HEPTA, 5);
-        RET(ELEMENT_VALUE_OCTAL, 5);
-            RET(ELEMENT_VALUE_OCTO, 4);
-        RET(ELEMENT_VALUE_NONARY, 6);
-            RET(ELEMENT_VALUE_ENNA, 4);
-        RET(ELEMENT_VALUE_DECIMAL, 7);
-            RET(ELEMENT_VALUE_GESIMAL, 7);
-        RET(ELEMENT_VALUE_ELEVENARY, 9);
-            RET(ELEMENT_VALUE_LEVA, 4);
-        RET(ELEMENT_VALUE_DOZENAL, 7);
-            RET(ELEMENT_VALUE_DOZA, 4);
-        RET(ELEMENT_VALUE_BAKERS_DOZENAL, 15);
-            RET(ELEMENT_VALUE_KERS_DOZENAL, 13);
+        RET(NULLARY, 7);
+        RET(UNARY, 5);          RET(UN, 2);
+            RET(HEN, 3);
+            RET(SNA, 3);
+        RET(BINARY, 6);         RET(BI, 2);
+        RET(TRINARY, 7);        RET(TRI, 3);
+        RET(QUATERNARY, 10);    RET(TETRA, 5);
+        RET(QUINARY, 7);        RET(PENTA, 5);
+        RET(SEXIMAL, 7);        RET(HEXA, 4);
+        RET(SEPTIMAL, 8);       RET(HEPTA, 5);
+        RET(OCTAL, 5);          RET(OCTO, 4);
+        RET(NONARY, 6);         RET(ENNA, 4);
+        RET(DECIMAL, 7);        RET(GESIMAL, 7);
+        RET(ELEVENARY, 9);      RET(LEVA, 4);
+        RET(DOZENAL, 7);        RET(DOZA, 4);
+        RET(BAKERS_DOZENAL, 15); RET(KERS_DOZENAL, 13);
         //
-        RET(ELEMENT_VALUE_HEX, 3);
-            RET(ELEMENT_VALUE_TESSER, 6);
-        RET(ELEMENT_VALUE_SUBOPTIMAL, 10);
-            RET(ELEMENT_VALUE_MAL, 3);
+        RET(HEX, 3);            RET(TESSER, 6);
+        RET(SUBOPTIMAL, 10);    RET(MAL, 3);
         //
-        RET(ELEMENT_VALUE_VIGESIMAL, 9);
-            RET(ELEMENT_VALUE_ICOSI, 5);
+        RET(VIGESIMAL, 9);      RET(ICOSI, 5);
         //
-        RET(ELEMENT_VALUE_NIFTIMAL, 8);
-            RET(ELEMENT_VALUE_FETA, 4);
+        RET(NIFTIMAL, 8);       RET(FETA, 4);
         //
-        RET(ELEMENT_VALUE_CENTESIMAL, 10);
-            RET(ELEMENT_VALUE_HECTO, 5);
+        RET(CENTESIMAL, 10);    RET(HECTO, 5);
         //
-        RET(ELEMENT_VALUE_NARY, 4);
-            RET(ELEMENT_VALUE_ARY, 3);
-        RET(ELEMENT_VALUE_IMAL, 4);
-            RET(ELEMENT_VALUE_AL, 2);
+        RET(NARY, 4);           RET(ARY, 3);
+        RET(IMAL, 4);           RET(AL, 2);
         //
         default: return '\0';
     }
@@ -305,52 +245,34 @@ int element_length(enum ELEMENT_VALUE ev) {
 
 char short_code(enum ELEMENT_VALUE ev) {
     switch (ev) {
-        RET(ELEMENT_VALUE_NEGA, '-');
-        RET(ELEMENT_VALUE_VOT, '/');
+        RET(NEGA, '-');
+        RET(VOT, '/');
         //
-        RET(ELEMENT_VALUE_NULLARY, '0');
-        RET(ELEMENT_VALUE_UNARY, '1');
-            RET(ELEMENT_VALUE_UN, '+');
-            RET(ELEMENT_VALUE_HEN, '(');
-            RET(ELEMENT_VALUE_SNA, ')');
-        RET(ELEMENT_VALUE_BINARY, 'b');
-            RET(ELEMENT_VALUE_BI, '2');
-        RET(ELEMENT_VALUE_TRINARY, 't');
-            RET(ELEMENT_VALUE_TRI, '3');
-        RET(ELEMENT_VALUE_QUATERNARY, 'q');
-            RET(ELEMENT_VALUE_TETRA, '4');
-        RET(ELEMENT_VALUE_QUINARY, 'Q');
-            RET(ELEMENT_VALUE_PENTA, '5');
-        RET(ELEMENT_VALUE_SEXIMAL, 's');
-            RET(ELEMENT_VALUE_HEXA, '6');
-        RET(ELEMENT_VALUE_SEPTIMAL, 'S');
-            RET(ELEMENT_VALUE_HEPTA, '7');
-        RET(ELEMENT_VALUE_OCTAL, 'o');
-            RET(ELEMENT_VALUE_OCTO, '8');
-        RET(ELEMENT_VALUE_NONARY, 'n');
-            RET(ELEMENT_VALUE_ENNA, '9');
-        RET(ELEMENT_VALUE_DECIMAL, 'd');
-            RET(ELEMENT_VALUE_GESIMAL, 'A');
-        RET(ELEMENT_VALUE_ELEVENARY, 'e');
-            RET(ELEMENT_VALUE_LEVA, 'B');
-        RET(ELEMENT_VALUE_DOZENAL, 'z');
-            RET(ELEMENT_VALUE_DOZA, 'C');
-        RET(ELEMENT_VALUE_BAKERS_DOZENAL, 'Z');
-            RET(ELEMENT_VALUE_KERS_DOZENAL, 'D');
+        RET(NULLARY, '0');
+        RET(UNARY, '1');        RET(UN, '+');
+            RET(HEN, '(');
+            RET(SNA, ')');
+        RET(BINARY, 'b');       RET(BI, '2');
+        RET(TRINARY, 't');      RET(TRI, '3');
+        RET(QUATERNARY, 'q');   RET(TETRA, '4');
+        RET(QUINARY, 'Q');      RET(PENTA, '5');
+        RET(SEXIMAL, 's');      RET(HEXA, '6');
+        RET(SEPTIMAL, 'S');     RET(HEPTA, '7');
+        RET(OCTAL, 'o');        RET(OCTO, '8');
+        RET(NONARY, 'n');       RET(ENNA, '9');
+        RET(DECIMAL, 'd');      RET(GESIMAL, 'A');
+        RET(ELEVENARY, 'e');    RET(LEVA, 'B');
+        RET(DOZENAL, 'z');      RET(DOZA, 'C');
+        RET(BAKERS_DOZENAL, 'Z'); RET(KERS_DOZENAL, 'D');
         //
-        RET(ELEMENT_VALUE_HEX, 'h');
-            RET(ELEMENT_VALUE_TESSER, 'F');
-        RET(ELEMENT_VALUE_SUBOPTIMAL, 'm');
-            RET(ELEMENT_VALUE_MAL, 'M');
+        RET(HEX, 'h');          RET(TESSER, 'F');
+        RET(SUBOPTIMAL, 'm');   RET(MAL, 'M');
         //
-        RET(ELEMENT_VALUE_VIGESIMAL, 'v');
-            RET(ELEMENT_VALUE_ICOSI, 'I');
+        RET(VIGESIMAL, 'v');    RET(ICOSI, 'I');
         //
-        RET(ELEMENT_VALUE_NIFTIMAL, 'f');
-            RET(ELEMENT_VALUE_FETA, 'T');
+        RET(NIFTIMAL, 'f');     RET(FETA, 'T');
         //
-        RET(ELEMENT_VALUE_CENTESIMAL, 'c');
-            RET(ELEMENT_VALUE_HECTO, 'Y');
+        RET(CENTESIMAL, 'c');   RET(HECTO, 'Y');
         default: return '\0';
     }
 }
