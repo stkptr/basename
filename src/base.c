@@ -96,7 +96,6 @@ int is_base_case(int n) {
 // Holds a list of ELEMENT_VALUEs
 struct element_list_s {
     int element_count;
-    int element_begin;
     int box_size;
     enum ELEMENT_VALUE *elements;
 };
@@ -106,7 +105,6 @@ struct element_list_s {
 struct element_list_s *elist_new() {
     struct element_list_s *el = malloc(sizeof(struct element_list_s));
     el->element_count = 0;
-    el->element_begin = 15;
     el->box_size = 128;
     el->elements = calloc(el->box_size, sizeof(enum ELEMENT_VALUE));
     return el;
@@ -123,18 +121,10 @@ void elist_free(struct element_list_s *el) {
 // Automatically resize an elist if necessary
 void elist_resize(struct element_list_s *el) {
     // expand forward
-    if (el->element_begin + el->element_count == el->box_size) {
+    if (el->element_count == el->box_size) {
         el->box_size *= 2;
         el->elements = realloc(el->elements, el->box_size * sizeof(enum ELEMENT_VALUE));
     // expand backward
-    } else if (el->element_begin == 0) {
-        int new_size = el->box_size *= 2;
-        enum ELEMENT_VALUE *temp = calloc(new_size, sizeof(enum ELEMENT_VALUE));
-        memmove(temp + el->box_size, el->elements, el->box_size);
-        free(el->elements);
-        el->elements = temp;
-        el->element_begin += el->box_size;
-        el->box_size = new_size;
     }
 }
 
@@ -142,25 +132,17 @@ void elist_resize(struct element_list_s *el) {
 // Append/push a value to an elist
 void elist_append(struct element_list_s *el, enum ELEMENT_VALUE value) {
     elist_resize(el);
-    el->elements[el->element_begin + el->element_count++] = value;
+    el->elements[el->element_count++] = value;
 }
 
 
 // Append while automatically adding the favor direction
 void elist_append_with_favor(struct element_list_s *el, enum ELEMENT_VALUE value) {
     if (el->element_count) {
-        enum ELEMENT_VALUE previous = el->elements[el->element_begin + el->element_count - 1];
+        enum ELEMENT_VALUE previous = el->elements[el->element_count - 1];
         elist_append(el, pair_favor(previous, value));
     }
     elist_append(el, value);
-}
-
-
-// Prepend to an elist
-void elist_prepend(struct element_list_s *el, enum ELEMENT_VALUE value) {
-    elist_resize(el);
-    el->element_count++;
-    el->elements[--el->element_begin] = value;
 }
 
 #define max(n, m) (((n) > (m)) ? (n) : (m))
@@ -176,7 +158,7 @@ char *elist_str(struct element_list_s *el) {
 
     for (int i = 0; i < el->element_count; i++) {
         // yes %n
-        sprintf(str + offset, "%i_%n", el->elements[el->element_begin + i], &written);
+        sprintf(str + offset, "%i_%n", el->elements[i], &written);
         offset += written;
     }
 
@@ -201,17 +183,17 @@ char *elist_name(struct element_list_s *el) {
         enum ELEMENT_VALUE previous, current, next;
         int keep_first = 1, keep_last = 1;
 
-        current = el->elements[el->element_begin + i];
+        current = el->elements[i];
 
         if (i) {
-            previous = el->elements[el->element_begin + i - 1];
+            previous = el->elements[i - 1];
             if (previous == ELEMENT_VALUE_PREFER_FIRST) {
                 keep_first = 0;
             }
         }
 
         if (i < el->element_count - 1) {
-            next = el->elements[el->element_begin + i + 1];
+            next = el->elements[i + 1];
             if (next == ELEMENT_VALUE_PREFER_LAST) {
                 keep_last = 0;
             }
@@ -321,7 +303,7 @@ void test_construct() {
     str = elist_str(el);
 
     for (int i = 0; i < el->element_count; i++) {
-        enum ELEMENT_VALUE ev = el->elements[el->element_begin + i];
+        enum ELEMENT_VALUE ev = el->elements[i];
         const char *s = element_as_string(ev);
         if (!element_value_is_preference(ev)) {
             printf("%s ", s);
