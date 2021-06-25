@@ -9,4 +9,4 @@ The purpose of the project is to see how fast it can be made without platform-sp
 
 ## Usage rights
 
-Unlicense, see LICENSE.
+Unlicense, see UNLICENSE for details.
