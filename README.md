@@ -7,6 +7,6 @@ It generates fun things like `binbinbinbinbinbinoctelevenary` for base 5758.
 The purpose of the project is to see how fast it can be made without platform-specific optimizations like SIMD or GPU.
 
 
-# Usage rights
+## Usage rights
 
 Unlicense, see LICENSE.
