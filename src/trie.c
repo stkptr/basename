@@ -21,33 +21,37 @@ char get_next_c(const char *string, int *index, int *sindex) {
             case '\0':
                 (*index)--; // adjust so that string[index] == '\0'
                 return '\0';
-            case 'A':
-            case 'E':
-            case 'O':
-            case 'U':
-            // punctuation
-            case '\'':
-            case '"':
-            case '.':
-            case ',':
-            case ':':
-            case ';':
-            // whitespace
-            case ' ':
-            case '\t':
-            case '\v':
-            case '\n':
-            case '\r':
-                break;
             case 'I':
                 if (*index > 1 && string[*index - 2] == 'b') {
                     (*sindex)++;
                     return ch;
                 }
                 break;
-            default:
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'F':
+            case 'G':
+            case 'H':
+            case 'J':
+            case 'K':
+            case 'L':
+            case 'M':
+            case 'N':
+            case 'P':
+            case 'Q':
+            case 'R':
+            case 'S':
+            case 'T':
+            case 'V':
+            case 'W':
+            case 'X':
+            case 'Y':
+            case 'Z':
                 (*sindex)++;
                 return ch;
+            default:
+                break;
         }
     }
 }
