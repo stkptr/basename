@@ -28,8 +28,13 @@ void elist_append_with_favor(struct element_list_s *el, enum ELEMENT_VALUE value
 // User must free
 char *elist_str(struct element_list_s *el);
 
+// Create a hyphenated name
+// User must free
+char *elist_hyphen(struct element_list_s *el);
+
 // Names the elist el according to the vowel ommitting rules
 // el MUST have the preference values between each element
+// User must free
 char *elist_name(struct element_list_s *el);
 
 // Make a shortened code for a base

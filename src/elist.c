@@ -59,11 +59,42 @@ char *elist_str(struct element_list_s *el) {
 }
 
 
-char *elist_name(struct element_list_s *el) {
-    // maximum medial element length is 6, except for bakers which is 13 (nice)
-    // divide by two to account for the preferences
+char *elist_hyphen(struct element_list_s *el) {
+    // maximum medial element length is 6, except for bakers which is 13 (nice), add one for the hyphen
     // maximum final is 10, except for bakers which is 15
     // +1 for the nul, of course
+    // this is extra big if the list has preferences, oh well
+    int length = el->element_count * 14 + 15 + 1;
+    char *str = calloc(length, sizeof(char));
+    int offset = 0;
+
+    for (int i = 0; i < el->element_count; i++) {
+        enum ELEMENT_VALUE ev = el->elements[i];
+        // skip preferences
+        if (ev == ELEMENT_VALUE_PREFER_FIRST
+                || ev == ELEMENT_VALUE_PREFER_LAST
+                || ev == ELEMENT_VALUE_PREFER_NEITHER) {
+            continue;
+        }
+
+        int elength = element_length(ev);
+        const char *cstr = element_as_string(ev);
+        for (int si = 0; si < elength; si++) {
+            str[offset++] = cstr[si];
+        }
+
+        if (i < el->element_count - 1) {
+            str[offset++] = '-';
+        }
+    }
+
+    return str;
+}
+
+
+char *elist_name(struct element_list_s *el) {
+    // see hyphen for details on this equation
+    // with divide by two to account for the preferences
     int length = (el->element_count / 2) * 13 + 15 + 1;
     char *str = calloc(length, sizeof(char));
     int offset = 0;
