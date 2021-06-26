@@ -13,7 +13,8 @@ char upper(char ch) {
     return ch;
 }
 
-char get_next_c(const char *string, int *index) {
+// sindex holds the amount of characters that were actually considered
+char get_next_c(const char *string, int *index, int *sindex) {
     for (;;) {
         char ch = upper(string[(*index)++]);
         switch (ch) {
@@ -40,31 +41,46 @@ char get_next_c(const char *string, int *index) {
                 break;
             case 'I':
                 if (*index > 1 && string[*index - 2] == 'b') {
+                    (*sindex)++;
                     return ch;
                 }
                 break;
             default:
+                (*sindex)++;
                 return ch;
         }
     }
 }
 
+int special_len(const char *s) {
+    char ch;
+    int index = 0;
+    int dummy = 0;
+    int len = 0;
+
+    while ((ch = get_next_c(s, &index, &dummy)) != '\0')
+        len++;
+
+    return len;
+}
+
 char peek_next_c(const char *string, int *index) {
-    char c = get_next_c(string, index);
+    int dummy = 0;
+    char c = get_next_c(string, index, &dummy);
     (*index)--;
     return c;
 }
 
 #define consume(x, y) get_next_c(x, y)
 
-int expect(const char *string, int *index, char expected) {
-    char c = get_next_c(string, index);
+int expect(const char *string, int *index, int *sindex, char expected) {
+    char c = get_next_c(string, index, sindex);
     return c == expected;
 }
 
-#define POP() get_next_c(string, index)
+#define POP() get_next_c(string, index, sindex)
 #define PEEK() peek_next_c(string, index)
-#define EXPECT(c) expect(string, index, c)
+#define EXPECT(c) expect(string, index, sindex, c)
 #define ACCEPT(v) return ELEMENT_VALUE_ ## v
 #define PACCEPT(v) POP(); ACCEPT(v)
 #define ERROR() ACCEPT(INVALID)
@@ -72,7 +88,8 @@ int expect(const char *string, int *index, char expected) {
 #define ECHAIN(e, a) POP(); ECHAIN_NP(e, a)
 
 // The hardcoded trie
-enum ELEMENT_VALUE parse_element(const char *string, int *index) {
+enum ELEMENT_VALUE parse_element(const char *string, int *index,
+                                 int *sindex, int length) {
     switch (POP()) {
     // B, binary, bi, baker's dozenal, baker
     case 'B':
@@ -81,8 +98,13 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index) {
             POP(); // consume peeked
             switch (PEEK()) {
             case 'N': // BINRY
-                ECHAIN(EXPECT('R') && EXPECT('Y'),
-                    BINARY);
+                // solves the bi-un ambiguity
+                if (length - *sindex == 3) {
+                    ECHAIN(EXPECT('R') && EXPECT('Y'),
+                        BINARY);
+                } else {
+                    ACCEPT(BI);
+                }
             default: // BI
                 ACCEPT(BI);
             }
@@ -91,9 +113,14 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index) {
             if (EXPECT('R')) {
                 switch (PEEK()) {
                 case 'S':
-                    ECHAIN(EXPECT('D') && EXPECT('Z')
-                           && EXPECT('N') && EXPECT('L'),
-                        BAKERS_DOZENAL);
+                    // solve the bakersuboptimal ambiguity
+                    if (length - *sindex == 5) {
+                        ECHAIN(EXPECT('D') && EXPECT('Z')
+                               && EXPECT('N') && EXPECT('L'),
+                            BAKERS_DOZENAL);
+                    } else {
+                        ACCEPT(BAKER);
+                    }
                 default:
                     ACCEPT(BAKER);
                 }
@@ -109,7 +136,12 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index) {
         case 'T':
             switch(PEEK()) {
             case 'L':
-                PACCEPT(OCTAL);
+                // solves the octelevenary ambiguity
+                if (length - *sindex == 1) {
+                    PACCEPT(OCTAL);
+                } else {
+                    ACCEPT(OCTO);
+                }
             default:
                 ACCEPT(OCTO);
             }
@@ -125,6 +157,8 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index) {
         switch (POP()) {
         case 'C':
             switch (PEEK()) {
+            // there is technically an ambiguity of decimal and decamal
+            // however, decamal is nonstandard (10 * 7, instead of maldeca 7 * 10)
             case 'M':
                 ECHAIN(EXPECT('L'), DECIMAL);
             default:
@@ -133,7 +167,12 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index) {
         case 'Z':
             switch (PEEK()) {
             case 'N':
-                ECHAIN(EXPECT('L'), DOZENAL);
+                // Solve the dozenal and doza-un ambiguity
+                if (length - *sindex == 1) {
+                    ECHAIN(EXPECT('L'), DOZENAL);
+                } else {
+                    ACCEPT(DOZA);
+                }
             default:
                 ACCEPT(DOZA);
             }
@@ -176,7 +215,12 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index) {
         if (POP() == 'V') {
             switch (PEEK()) {
             case 'N':
-                ECHAIN(EXPECT('R'), ELEVENARY);
+                // Solves the leva-un ambiguity
+                if (length - *sindex == 3) {
+                    ECHAIN(EXPECT('R') && EXPECT('Y'), ELEVENARY);
+                } else {
+                    ACCEPT(LEVA);
+                }
             default:
                 ACCEPT(LEVA);
             }
@@ -199,7 +243,7 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index) {
             // so N in nega would be 1
             // the G would then be 2
             // since we are at G, check if 2
-            if (*index == 2)
+            if (*sindex == 2)
                 PACCEPT(NEGA);
         case 'L':
             ECHAIN(EXPECT('L') && EXPECT('R')
@@ -208,6 +252,9 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index) {
         case 'N':
             POP();
             switch (PEEK()) {
+            // Ambiguity:
+            // enner's dozenal (NNRSDZNL)
+            // However, this is nonstandard (compare ennaker's dozenal NNKRSDZNL)
             case 'R':
                 ECHAIN(EXPECT('Y'), NONARY);
             default:
@@ -253,6 +300,10 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index) {
                       && EXPECT('L'),
                 SEPTIMAL);
         case 'X':
+            // There is an ambiguity here
+            // sexmal (6 * 17) versus seximal (6)
+            // However, sex- is nonstandard
+            // hexamal parses fine, so this is a non-issue
             switch (PEEK()) {
             case 'M':
                 ECHAIN(EXPECT('L'), SEXIMAL);
@@ -268,7 +319,12 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index) {
         case 'R':
             switch (PEEK()) {
             case 'N':
-                ECHAIN(EXPECT('R') && EXPECT('Y'), TRINARY);
+                // this solves the TRI-UN and TRINARY ambiguity
+                if (length - *sindex == 3) {
+                    ECHAIN(EXPECT('R') && EXPECT('Y'), TRINARY);
+                } else {
+                    ACCEPT(TRI);
+                }
             default:
                 ACCEPT(TRI);
             }
@@ -296,17 +352,21 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index) {
     }
 }
 
-
 struct element_list_s *elist_from_base_name(const char *name) {
     int index = 0;
+    int sindex = 0;
+    // Gross, this makes the algorithm O(2n)
+    // But required for TRIN- and other ambiguities
+    int length = special_len(name);
     struct element_list_s *el = elist_new();
     enum ELEMENT_VALUE ev;
 
-    while ((ev = parse_element(name, &index)) != ELEMENT_VALUE_INVALID) {
+    while ((ev = parse_element(name, &index, &sindex, length)) != ELEMENT_VALUE_INVALID) {
         elist_append(el, ev);
     }
 
     // still stuff left to parse, the string must have been nonconformant
+    // or there are ambiguities
     if (name[index] != '\0') {
         elist_free(el);
         return NULL;

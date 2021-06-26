@@ -211,8 +211,7 @@ void test_construct() {
 }
 
 
-void test_trie() {
-    const char *name = "henpentapentapentahexasnadozuncentesimal";
+void test_trie(const char *name) {
     struct element_list_s *el;
     char *str;
 
