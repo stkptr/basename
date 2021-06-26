@@ -24,6 +24,19 @@ char get_next_c(const char *string, int *index) {
             case 'E':
             case 'O':
             case 'U':
+            // punctuation
+            case '\'':
+            case '"':
+            case '.':
+            case ',':
+            case ':':
+            case ';':
+            // whitespace
+            case ' ':
+            case '\t':
+            case '\v':
+            case '\n':
+            case '\r':
                 break;
             case 'I':
                 if (*index > 1 && string[*index - 2] == 'b') {
