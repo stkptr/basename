@@ -14,6 +14,7 @@ int element_value_is_preference(enum ELEMENT_VALUE ev) {
 
 #define OPTION(n, final, medial) case (n): return (is_final) ? (final) : (medial)
 #define BARE(n, bare, medial) case (n): return (is_bare) ? (bare) : (medial)
+#define TRIPLE(n, bare, medial, final) case (n): return (is_bare) ? (bare) : ((is_final) ? (final) : (medial))
 
 enum ELEMENT_VALUE base_as_element(int n, int is_final, int is_bare) {
     switch (n) {
@@ -27,7 +28,7 @@ enum ELEMENT_VALUE base_as_element(int n, int is_final, int is_bare) {
         OPTION(7,   ELEMENT_VALUE_SEPTIMAL,     ELEMENT_VALUE_HEPTA);
         OPTION(8,   ELEMENT_VALUE_OCTAL,        ELEMENT_VALUE_OCTO);
         OPTION(9,   ELEMENT_VALUE_NONARY,       ELEMENT_VALUE_ENNA);
-        BARE  (10,  ELEMENT_VALUE_DECIMAL,      ELEMENT_VALUE_GESIMAL);
+        TRIPLE(10,  ELEMENT_VALUE_DECIMAL,      ELEMENT_VALUE_DECA, ELEMENT_VALUE_GESIMAL);
         OPTION(11,  ELEMENT_VALUE_ELEVENARY,    ELEMENT_VALUE_LEVA);
         OPTION(12,  ELEMENT_VALUE_DOZENAL,      ELEMENT_VALUE_DOZA);
         BARE  (13,  ELEMENT_VALUE_BAKERS_DOZENAL, ELEMENT_VALUE_KERS_DOZENAL);
@@ -80,6 +81,7 @@ const char *element_as_string(enum ELEMENT_VALUE ev) {
         RET(NONARY, "nonary");
             RET(ENNA, "enna");
         RET(DECIMAL, "decimal");
+            RET(DECA, "deca");
             RET(GESIMAL, "gesimal");
         RET(ELEVENARY, "elevenary");
             RET(LEVA, "leva");
@@ -135,7 +137,9 @@ char element_final_char(enum ELEMENT_VALUE ev) {
         RET(SEPTIMAL, 'l');     RET(HEPTA, 'a');
         RET(OCTAL, 'l');        RET(OCTO, 'o');
         RET(NONARY, 'y');       RET(ENNA, 'a');
-        RET(DECIMAL, 'l');      RET(GESIMAL, 'l');
+        RET(DECIMAL, 'l');
+            RET(DECA, 'a');
+            RET(GESIMAL, 'l');
         RET(ELEVENARY, 'y');    RET(LEVA, 'a');
         RET(DOZENAL, 'l');      RET(DOZA, 'a');
         RET(BAKERS_DOZENAL, 'l'); RET(KERS_DOZENAL, 'l');
@@ -178,7 +182,9 @@ char element_begin_char(enum ELEMENT_VALUE ev) {
         RET(SEPTIMAL, 's');     RET(HEPTA, 'h');
         RET(OCTAL, 'o');        RET(OCTO, 'o');
         RET(NONARY, 'n');       RET(ENNA, 'e');
-        RET(DECIMAL, 'd');      RET(GESIMAL, 'g');
+        RET(DECIMAL, 'd');
+            RET(DECA, 'a');
+            RET(GESIMAL, 'g');
         RET(ELEVENARY, 'e');    RET(LEVA, 'l');
         RET(DOZENAL, 'd');      RET(DOZA, 'd');
         RET(BAKERS_DOZENAL, 'b'); RET(KERS_DOZENAL, 'k');
@@ -220,7 +226,9 @@ int element_length(enum ELEMENT_VALUE ev) {
         RET(SEPTIMAL, 8);       RET(HEPTA, 5);
         RET(OCTAL, 5);          RET(OCTO, 4);
         RET(NONARY, 6);         RET(ENNA, 4);
-        RET(DECIMAL, 7);        RET(GESIMAL, 7);
+        RET(DECIMAL, 7);
+            RET(DECA, 4);
+            RET(GESIMAL, 7);
         RET(ELEVENARY, 9);      RET(LEVA, 4);
         RET(DOZENAL, 7);        RET(DOZA, 4);
         RET(BAKERS_DOZENAL, 15); RET(KERS_DOZENAL, 13);
@@ -260,7 +268,8 @@ char short_code(enum ELEMENT_VALUE ev) {
         RET(SEPTIMAL, 'S');     RET(HEPTA, '7');
         RET(OCTAL, 'o');        RET(OCTO, '8');
         RET(NONARY, 'n');       RET(ENNA, '9');
-        RET(DECIMAL, 'd');      RET(GESIMAL, 'A');
+        RET(DECIMAL, 'd');      RET(DECA, 'A');
+            RET(GESIMAL, 'g');
         RET(ELEVENARY, 'e');    RET(LEVA, 'B');
         RET(DOZENAL, 'z');      RET(DOZA, 'C');
         RET(BAKERS_DOZENAL, 'Z'); RET(KERS_DOZENAL, 'D');
@@ -285,8 +294,6 @@ enum ELEMENT_VALUE pair_favor(enum ELEMENT_VALUE first, enum ELEMENT_VALUE last)
     // oo = o,  oe = e,  oi = i, ou = u
     char f = element_final_char(first);
     char l = element_begin_char(last);
-
-    //printf("Pair: %s %s %c%c\n", element_as_string(first), element_as_string(last), f, l);
 
     if (f == 'i') {
         if (l == 'i' || l == 'u') {
