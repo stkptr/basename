@@ -24,6 +24,13 @@ NG
 VT
 
 
+Plus some popular fan additions:
+
+NN
+SX
+RSDZNL
+
+
 
 Then a trie is constructed.
 
@@ -70,7 +77,7 @@ N
     LLRY (nullary) BARE
     N
         RY (nonary) FINAL
-        -> (enna) [can never be unun]
+        -> (enna/non) MEDIAL/UNOFFICIAL [can never be unun]
     RY (unary) BARE
     -> (un)
 P
@@ -78,11 +85,15 @@ P
 Q
     NRY (quinary) FINAL
     TRNRY (quaternary) FINAL
+R
+    SDZNL (er's dozenal) UNOFFICIAL
 S
     BPTML (suboptimal) FINAL
     N (sna)
     PTML (septimal) FINAL
-    XML (seximal) FINAL
+    X
+        ML (seximal) FINAL
+        -> (sex) UNOFFICIAL
 T
     R
         NRY (trinary) FINAL
