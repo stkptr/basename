@@ -4,6 +4,7 @@
 
 #include "element.h"
 #include "elist.h"
+#include "trie.h"
 
 
 struct pair_s {
@@ -207,6 +208,19 @@ void test_construct() {
         printf("  Numeric: %s\n", str);
         elist_free(el);
     }
+}
+
+
+void test_trie() {
+    const char *name = "henpentapentapentahexasnadozuncentesimal";
+    struct element_list_s *el;
+    char *str;
+
+    el = elist_from_base_name(name);
+    str = elist_hyphen(el);
+
+    printf("%s\n", str);
+    free(str);
 }
 
 
