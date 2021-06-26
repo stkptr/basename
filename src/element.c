@@ -13,7 +13,6 @@ int element_value_is_preference(enum ELEMENT_VALUE ev) {
 
 
 #define OPTION(n, final, medial) case (n): return (is_final) ? (final) : (medial)
-#define BARE(n, bare, medial) case (n): return (is_bare) ? (bare) : (medial)
 #define TRIPLE(n, bare, medial, final) case (n): return (is_bare) ? (bare) : ((is_final) ? (final) : (medial))
 
 enum ELEMENT_VALUE base_as_element(int n, int is_final, int is_bare) {
@@ -31,7 +30,7 @@ enum ELEMENT_VALUE base_as_element(int n, int is_final, int is_bare) {
         TRIPLE(10,  ELEMENT_VALUE_DECIMAL,      ELEMENT_VALUE_DECA, ELEMENT_VALUE_GESIMAL);
         OPTION(11,  ELEMENT_VALUE_ELEVENARY,    ELEMENT_VALUE_LEVA);
         OPTION(12,  ELEMENT_VALUE_DOZENAL,      ELEMENT_VALUE_DOZA);
-        BARE  (13,  ELEMENT_VALUE_BAKERS_DOZENAL, ELEMENT_VALUE_KERS_DOZENAL);
+        TRIPLE(13,  ELEMENT_VALUE_BAKERS_DOZENAL, ELEMENT_VALUE_BAKER, ELEMENT_VALUE_KERS_DOZENAL);
         //
         OPTION(16,  ELEMENT_VALUE_HEX,          ELEMENT_VALUE_TESSER);
         OPTION(17,  ELEMENT_VALUE_SUBOPTIMAL,   ELEMENT_VALUE_MAL);
@@ -47,7 +46,7 @@ enum ELEMENT_VALUE base_as_element(int n, int is_final, int is_bare) {
 }
 
 #undef OPTION
-#undef BARE
+#undef TRIPLE
 
 
 #define RET(match, value) case (ELEMENT_VALUE_ ## match): return (value)
@@ -88,6 +87,7 @@ const char *element_as_string(enum ELEMENT_VALUE ev) {
         RET(DOZENAL, "dozenal");
             RET(DOZA, "doza");
         RET(BAKERS_DOZENAL, "baker's dozenal");
+            RET(BAKER, "baker");
             RET(KERS_DOZENAL, "ker's dozenal");
         //
         RET(HEX, "hex");
@@ -142,7 +142,9 @@ char element_final_char(enum ELEMENT_VALUE ev) {
             RET(GESIMAL, 'l');
         RET(ELEVENARY, 'y');    RET(LEVA, 'a');
         RET(DOZENAL, 'l');      RET(DOZA, 'a');
-        RET(BAKERS_DOZENAL, 'l'); RET(KERS_DOZENAL, 'l');
+        RET(BAKERS_DOZENAL, 'l');
+            RET(BAKER, 'r');
+            RET(KERS_DOZENAL, 'l');
         //
         RET(HEX, 'x');          RET(TESSER, 'r');
         RET(SUBOPTIMAL, 'l');   RET(MAL, 'l');
@@ -187,7 +189,9 @@ char element_begin_char(enum ELEMENT_VALUE ev) {
             RET(GESIMAL, 'g');
         RET(ELEVENARY, 'e');    RET(LEVA, 'l');
         RET(DOZENAL, 'd');      RET(DOZA, 'd');
-        RET(BAKERS_DOZENAL, 'b'); RET(KERS_DOZENAL, 'k');
+        RET(BAKERS_DOZENAL, 'b');
+            RET(BAKER, 'b');
+            RET(KERS_DOZENAL, 'k');
         //
         RET(HEX, 'h');          RET(TESSER, 't');
         RET(SUBOPTIMAL, 's');   RET(MAL, 'm');
@@ -231,7 +235,9 @@ int element_length(enum ELEMENT_VALUE ev) {
             RET(GESIMAL, 7);
         RET(ELEVENARY, 9);      RET(LEVA, 4);
         RET(DOZENAL, 7);        RET(DOZA, 4);
-        RET(BAKERS_DOZENAL, 15); RET(KERS_DOZENAL, 13);
+        RET(BAKERS_DOZENAL, 15);
+            RET(BAKER, 5);
+            RET(KERS_DOZENAL, 13);
         //
         RET(HEX, 3);            RET(TESSER, 6);
         RET(SUBOPTIMAL, 10);    RET(MAL, 3);
@@ -272,7 +278,8 @@ char short_code(enum ELEMENT_VALUE ev) {
             RET(GESIMAL, 'g');
         RET(ELEVENARY, 'e');    RET(LEVA, 'B');
         RET(DOZENAL, 'z');      RET(DOZA, 'C');
-        RET(BAKERS_DOZENAL, 'Z'); RET(KERS_DOZENAL, 'D');
+        RET(BAKERS_DOZENAL, 'k'); RET(BAKER, 'D');
+            RET(KERS_DOZENAL, 'Z');
         //
         RET(HEX, 'h');          RET(TESSER, 'F');
         RET(SUBOPTIMAL, 'm');   RET(MAL, 'M');
