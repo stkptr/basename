@@ -2,7 +2,7 @@ CFLAGS = -Wall -Wpedantic
 
 all: base
 
-base: src/base.c src/element.c
+base: src/base.c src/element.c src/elist.c
 	$(CC) -o $@ $^ $(CFLAGS) -lm
 
 clean:
