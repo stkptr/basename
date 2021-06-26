@@ -35,11 +35,12 @@ RSDZNL
 Then a trie is constructed.
 
 B
-    I (bi) [slap fix for biker's dozenal]
+    I
+        NRY (binary) FINAL
+        -> (bi) [slap fix for biker's dozenal]
     KR
         SDZNL (baker's dozenal) FINAL
         -> (baker)
-    NRY (binary) FINAL
     -> (bi)
 C
     T
