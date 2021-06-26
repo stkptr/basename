@@ -216,10 +216,14 @@ void test_trie(const char *name) {
     char *str;
 
     el = elist_from_base_name(name);
-    str = elist_hyphen(el);
 
-    printf("%s\n", str);
-    free(str);
+    if (el) {
+        str = elist_hyphen(el);
+        printf("%s\n", str);
+        free(str);
+    } else {
+        printf("String '%s' could not be parsed.\n", name);
+    }
 }
 
 
