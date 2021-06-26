@@ -1,0 +1,90 @@
+NLLRY
+NRY N HN SN
+BNRY B
+TRNRY TR
+QTRNRY TTR
+QNRY PNT
+SXML HX
+SPTML HPT
+CTL CT
+NNRY NN
+DCML GSML
+LVNRY LV
+DZNL DZ
+BKRSDZNL KR'SDZNL
+HX TSSR
+SBPTML ML
+VGSML CS
+NFTML FT
+CNTSML HCT
+
+NG
+VT
+
+
+
+B
+    I (bi) [slap fix for biker's dozenal]
+    KR
+        SDZNL (baker's dozenal) FINAL
+        -> (baker)
+    NRY (binary) FINAL
+    -> (bi)
+C
+    T
+        L (octal) FINAL
+        -> (octo)
+    S (icosi)
+    NTSML (centesimal) FINAL
+D
+    C
+        ML (decimal) BARE
+        -> (deca) FINAL
+    Z
+        NL (dozenal) FINAL
+        -> (doza)
+F
+    T (feta)
+G
+    SML (gesimal) FINAL
+H
+    CT (hecto)
+    N (hen)
+    PT (hepta)
+    X (hex/hexa) FINAL/MEDIAL
+K
+    RSDZNL (ker's dozenal) FINAL
+L
+    V
+        NRY (elevenary) FINAL
+        -> (leva)
+M
+    L (mal)
+N
+    FTML (niftimal) FINAL
+    G (nega) PREFIX
+    LLRY (nullary) BARE
+    N
+        RY (nonary) FINAL
+        -> (enna) [can never be unun]
+    RY (unary) BARE
+    -> (un)
+P
+    NT (penta)
+Q
+    NRY (quinary) FINAL
+    TRNRY (quaternary) FINAL
+S
+    N (sna)
+    XML (seximal) FINAL
+    PTML (septimal) FINAL
+    BPTML (suboptimal) FINAL
+T
+    R
+        NRY (trinary) FINAL
+        -> (tri)
+    SSR (tesser)
+    TR (tetra)
+V
+    GSML (vigesimal) FINAL
+    T (vot)
