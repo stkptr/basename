@@ -242,12 +242,12 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
                    && EXPECT('L'),
                 NIFTIMAL);
         case 'G':
-            // check if at beginning
-            // 0 is true beginning, after it is checked it is 1
-            // so N in nega would be 1
-            // the G would then be 2
-            // since we are at G, check if 2
-            if (*sindex == 2)
+            // check if at beginning, since nega is strictly a prefix
+            // otherwise there would be word-medial ambiguity
+            //
+            // however, ambiguity: ungesimal
+            // but it is the only one, and it is invalid (elevenary is the valid version)
+            if (*sindex == 1)
                 PACCEPT(NEGA);
         case 'L':
             ECHAIN(EXPECT('L') && EXPECT('R')
