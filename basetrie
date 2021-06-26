@@ -1,6 +1,8 @@
+All elements are capitalized and all vowel letters (aeiou) are removed (except for I preceded by B). The vowel removal alleviates issues with vowel reduction performed when elements are catenated. I after B are kept to distinguish biker's dozenal and baker's dozenal.
+
 NLLRY
 NRY N HN SN
-BNRY B
+BINRY BI
 TRNRY TR
 QTRNRY TTR
 QNRY PNT
@@ -8,10 +10,10 @@ SXML HX
 SPTML HPT
 CTL CT
 NNRY NN
-DCML GSML
+DCML DC GSML
 LVNRY LV
 DZNL DZ
-BKRSDZNL KR'SDZNL
+BKRSDZNL BKR KRSDZNL
 HX TSSR
 SBPTML ML
 VGSML CS
@@ -22,6 +24,8 @@ NG
 VT
 
 
+
+Then a trie is constructed.
 
 B
     I (bi) [slap fix for biker's dozenal]
@@ -75,10 +79,10 @@ Q
     NRY (quinary) FINAL
     TRNRY (quaternary) FINAL
 S
-    N (sna)
-    XML (seximal) FINAL
-    PTML (septimal) FINAL
     BPTML (suboptimal) FINAL
+    N (sna)
+    PTML (septimal) FINAL
+    XML (seximal) FINAL
 T
     R
         NRY (trinary) FINAL
