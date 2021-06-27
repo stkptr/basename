@@ -29,7 +29,7 @@ At the moment there are factorization differences. The differences are likely ca
 
 The general operation is as follows, for base *n*:
 
-1. If *n* is a simple factor--one that has a defined root--return the root
+1. If *n* is a simple factor—one that has a defined root—return the root
 2. Factorize *n*, choosing the two factors which are closest
 3. Recurse for each factor
 
@@ -117,7 +117,7 @@ A sqrt of a sqrt doubles the degree.
 
 *i = root(2<sup>1</sup>, n) × 2<sup>0</sup> + root(2<sup>2</sup>, n) × 2<sup>1</sup> + root(2<sup>3</sup>, n) × 2<sup>2</sup>...*
 
-For the purposes of complexity analysis, we can ignore roots with lesser results than the greatest. As for increasing values of *n*, the proportion that the lesser roots contributes decreases. One can see this in action by `diff = lambda n: (complexity(n) - sqrt(n)) / complexity(n)` for various values if *n*.
+For the purposes of complexity analysis, we can ignore roots with lesser results than the greatest. As for increasing values of *n*, the proportion that the lesser roots contributes decreases. One can see this in action by `diff = lambda n: (complexity(n) - sqrt(n)) / complexity(n)` for various values of *n*.
 
 *i ≃ sqrt(n)*
 
