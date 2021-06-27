@@ -1,14 +1,18 @@
 CFLAGS = -Wall -Wpedantic
 
-DEPS = src/main.o src/base.o src/element.o src/elist.o
+# main.c for the macros to work
+DEPS = src/main.c src/base.o src/element.o src/elist.o
 
-all: name parse
+all: name parse hyphenate
 
 name: $(DEPS)
-	$(CC) -o $@ $^ $(CFLAGS) -lm
+	$(CC) -o $@ -DNAME $^ $(CFLAGS) -lm
 
 parse: $(DEPS) src/trie.o
-	$(CC) -o $@ $^ $(CFLAGS) -lm
+	$(CC) -o $@ -DPARSE $^ $(CFLAGS) -lm
+
+hyphenate: $(DEPS) src/trie.o
+	$(CC) -o $@ -DHYPHEN $^ $(CFLAGS) -lm
 
 %.o: src/%.c
 	$(CC) -c $@ $^ $(CFLAGS)
