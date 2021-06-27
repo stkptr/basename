@@ -107,19 +107,19 @@ def complexity(n):
 
 This is a geometric series of:
 
-*i = ceil(sqrt(n)) * 2<sup>0</sup> + ceil(sqrt(ceil(sqrt(n)))) * 2<sup>1</sup> + ceil(sqrt(ceil(sqrt(ceil(sqrt(n)))))) * 2<sup>2</sup>...*
+*i = ceil(sqrt(n)) × 2<sup>0</sup> + ceil(sqrt(ceil(sqrt(n)))) × 2<sup>1</sup> + ceil(sqrt(ceil(sqrt(ceil(sqrt(n)))))) × 2<sup>2</sup>...*
 
 Ignoring the ceil for practicality:
 
-*i = sqrt(n) * 2<sup>0</sup> + sqrt(sqrt(n)) * 2<sup>1</sup> + sqrt(sqrt(sqrt(n))) * 2<sup>2</sup>...*
+*i = sqrt(n) × 2<sup>0</sup> + sqrt(sqrt(n)) × 2<sup>1</sup> + sqrt(sqrt(sqrt(n))) × 2<sup>2</sup>...*
 
 A sqrt of a sqrt doubles the degree.
 
-*i = root(2<sup>1</sup>, n) * 2<sup>0</sup> + root(2<sup>2</sup>, n) * 2<sup>1</sup> + root(2<sup>3</sup>, n) * 2<sup>2</sup>...*
+*i = root(2<sup>1</sup>, n) × 2<sup>0</sup> + root(2<sup>2</sup>, n) × 2<sup>1</sup> + root(2<sup>3</sup>, n) × 2<sup>2</sup>...*
 
 For the purposes of complexity analysis, we can ignore roots with lesser results than the greatest.
 
-*i ~= sqrt(n)*
+*i ≃ sqrt(n)*
 
 Or, **O(sqrt(n))**
 
