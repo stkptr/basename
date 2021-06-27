@@ -33,11 +33,10 @@ The general operation is as follows, for base *n*:
 2. Factorize *n*, choosing the two factors which are closest
 3. Recurse for each factor
 
-The actual algorithm used is:
+The algorithm used for factorizing is:
 
-1. If *n* is a simple factor—one that has a defined root—return the root
-2. Assign *s* as *floor(sqrt(n))*
-3. Attempt to divide *n* by *s*
+1. Assign *s* as *floor(sqrt(n))*
+2. Attempt to divide *n* by *s*
     - If it is divisible, return *s* and *n / s*
     - Otherwise, decrement s and retry
 
