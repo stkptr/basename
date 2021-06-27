@@ -117,7 +117,7 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
             if (EXPECT('R')) {
                 switch (PEEK()) {
                 case 'S':
-                    // solve the bakersuboptimal ambiguity
+                    // solves the bakersuboptimal ambiguity
                     if (length - *sindex == 5) {
                         ECHAIN(EXPECT('D') && EXPECT('Z')
                                && EXPECT('N') && EXPECT('L'),
@@ -171,8 +171,8 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
         case 'Z':
             switch (PEEK()) {
             case 'N':
-                // Solve the dozenal and doza-un ambiguity
-                if (length - *sindex == 1) {
+                // Solves the dozenal and doza-un ambiguity
+                if (length - *sindex == 2) {
                     ECHAIN(EXPECT('L'), DOZENAL);
                 } else {
                     ACCEPT(DOZA);
