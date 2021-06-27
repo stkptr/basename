@@ -77,7 +77,75 @@ Special consideration must be made for certain finals like binary and hex, since
 
 The trie used in the algorithm is described in [basetrie](basetrie).
 
-Overall the algorithm has a lookahead of 1 character as well as the length remaining in the string, with a time complexity of O(2n) since it has to compute the length of the string, and actually parse it. As for space complexity, it's O(1). When considering the element reconstruction with the stack, the space complexity is not exactly O(n), as each character does not have a 1 to 1 correspondance with the roots. Instead it's somewhere more like O(n/3). In short: time O(n), space O(1), or O(n) with a stack.
+
+## Complexity analysis
+
+### Factorizer
+
+TL;DR: best case O(1), worst case O(sqrt(n)), with recursion being near O(sqrt(n))
+
+The factorizer makes use of the fact that *ceil(sqrt(n))* is equal or greater to the largest lower factor for *n*. In other words, it is very close to the closest factors of *n*.
+
+For *n* of 100, the root is 10. There are higher factors, like 20, but 20 is used in *5x20*, and 5 is less than 10.
+
+For any *n* the factorizer is **O(sqrt(n))** for the worst case, with the average case being nearer to **O(1)**.
+
+When used to factor to the roots we can approximate the amount of operations required with:
+
+```python
+def complexity(n):
+    n = math.ceil(math.sqrt(n)) # initial
+    i = n # we just performed n operations
+    p = 2 # the amount of recursive calls done in this step
+    # math.ceil(sqrt(...)) eventually reaches 2
+    while n != 2:
+        n = math.ceil(math.sqrt(n)) # the next operation count
+        i += n * p # multiply the operations by the amount of recursions
+        p *= 2 # double the recursions, since there are 2 recursions per step
+    return i
+```
+
+This is a geometric series of:
+
+*i = ceil(sqrt(n)) * 2^0 + ceil(sqrt(ceil(sqrt(n)))) * 2^1 + ceil(sqrt(ceil(sqrt(ceil(sqrt(n)))))) * 2^2...*
+
+Ignoring the ceil for practicality:
+
+*i = sqrt(n) * 2^0 + sqrt(sqrt(n)) * 2^1 + sqrt(sqrt(sqrt(n))) * 2^2...*
+
+A sqrt of a sqrt doubles the degree.
+
+*i = root(2^1, n) * 2^0 + root(2^2, n) * 2^1 + root(2^3, n) * 2^2...*
+
+For the purposes of complexity analysis, we can ignore roots with lesser results than the greatest.
+
+*i ~= sqrt(n)*
+
+Or, **O(sqrt(n))**
+
+### Parser
+
+TL;DR: time O(n), space O(1), or O(n) with a stack
+
+Overall the parsing algorithm has a lookahead of 1 character as well as the length remaining in the string, with a time complexity of O(2n) since it has to compute the length of the string, and actually parse it. As for space complexity, it's O(1). When considering the element reconstruction with the stack, the space complexity is not exactly O(n), as each character does not have a 1 to 1 correspondance with the roots. Instead it's somewhere more like O(n/3).
+
+### Accumulator
+
+The accumulator is the algorithm that converts root lists into the corresponding base number.
+
+It is **O(n)** in all cases.
+
+### `name`
+
+`name` factorizes at O(sqrt(n)), then performs vowel reduction at O(n) for the *sqrt(n)* roots, overall being **O(sqrt(n)).**
+
+### `hyphenate`
+
+`hyphenate` parses at O(n) for each character in its input, then performs O(n) hyphenation for the parsed roots, overall being **O(n)**.
+
+### `parse`
+
+`parse` is similar to `hyphenate`, parsing at O(n), then running the accumulator at O(n) for the roots, overall **O(n)**.
 
 
 ## Usage rights
