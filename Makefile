@@ -1,11 +1,19 @@
 CFLAGS = -Wall -Wpedantic
 
-all: base
+DEPS = src/main.o src/base.o src/element.o src/elist.o
 
-base: src/main.c src/base.c src/element.c src/elist.c src/trie.c
+all: name parse
+
+name: $(DEPS)
 	$(CC) -o $@ $^ $(CFLAGS) -lm
 
+parse: $(DEPS) src/trie.o
+	$(CC) -o $@ $^ $(CFLAGS) -lm
+
+%.o: src/%.c
+	$(CC) -c $@ $^ $(CFLAGS)
+
 clean:
-	rm -f base
+	rm -f base src/*.o
 
 .PHONY: all clean

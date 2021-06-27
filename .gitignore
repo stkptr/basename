@@ -1,2 +1,6 @@
-# executable
-base
+# objects
+*.o
+
+# executables
+name
+parse
