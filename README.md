@@ -97,7 +97,7 @@ The trie used in the algorithm is described in [basetrie](basetrie).
 
 TL;DR: best case O(1), worst case O(sqrt(n)), with recursion being near O(sqrt(n))
 
-The factorizer makes use of the fact that *floor(sqrt(n))* is equal or greater to the largest lower factor for *n*. In other words, it is very close to the closest factors of *n*.
+The factorizer makes use of the fact that *floor(sqrt(n))* is equal to or greater than the largest lower factor for *n*. In other words, it is very close to the closest factors of *n*.
 
 For *n* of 100, the root is 10. There are higher factors, like 20, but 20 is used in *5x20*, and 5 is less than 10.
 
