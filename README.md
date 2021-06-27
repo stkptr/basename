@@ -6,7 +6,7 @@ It generates fun things like `binbinbinbinbinbinoctelevenary` for base 5758, or 
 
 There are actually 3 programs in this repository; `name`, `hyphenate`, and `parse`. `name` generates base names from decimal integers. `hyphenate` parses base names and prints them out with hyphens in between each root. `parse` parses base names and converts them into decimal integers.
 
-The purpose of the project is to see how fast it can reasonably be made without platform-specific optimizations like SIMD or GPU, or parallelization.
+The purpose of the project is to see how fast it can reasonably be made without platform-specific optimizations like SIMD, GPU, or parallelization.
 
 ## Compiling and usage
 
@@ -25,7 +25,7 @@ To compile just run `$ make`.
 
 `name` follows the rules described by jan Misali.
 
-At the moment there are factorization differences. The differences are likely caused by the speed considerations this implementation makes. In this implementation a factorizer that uses the factor pair with one of the elements closest to *sqrt(n)* is used, with an exception for 100. In jan Misali's implementation a factorizer that chooses the shortest roots is used. I'm not sure how well it works though as jan Misali's implementation factorizes 200 as *20x10* for `decavigesimal`, whereas this implementation factorizes it as *2x100* for `bicentesimal`, which is 1 character shorter.
+At the moment there are factorization differences. The differences are likely caused by the speed considerations this implementation makes. In this implementation a factorizer that uses the factor pair with one of the elements closest to *sqrt(n)* is used, with an exception for 100. In jan Misali's implementation a factorizer that chooses the shortest roots is used. I'm not sure how well it works though as jan Misali's implementation factorizes 200 as *10x20* for `decavigesimal`, whereas this implementation factorizes it as *2x100* for `bicentesimal`, which is 1 character shorter.
 
 The general operation is as follows, for base *n*:
 
@@ -61,15 +61,23 @@ For any name *n'*:
 
 Parsing a name into roots is required for two of the three programs. For any name *n'*:
 
-1. Convert *n'* into uppercase, stripping all non-alphabetic characters, as well as AEOU, and I not followed by B
+1. Convert *n'* into uppercase, stripping all non-alphabetic characters, as well as AEOU, and I not preceded by B
 2. For each character in *n'*
     1. Add character to an internal string
     2. Attempt to index a precomputed trie, if accepts return the value, otherwise continue
     3. If the string is an impossible index, throw an error
 
+Removing vowels (except for I preceded by B) prevents vowel reduction from interfering with parsing. I preceded by B is kept to parse `biker's dozenal`.
+
+Since the accumulation algorithm doesn't care about order for the most part, and since the trie is simple enough, nonstandard roots can be supported very easily, permitting the bases `nonbinary`, `sexer's dozenal`/`hexer's dozenal`, and others.
+
 The actual implementation is slightly different. Instead of indexing a trie, the algorithm is implemented inside of a trie. Inside the trie there are multiple pop and peek calls, which get a character from the string. These commands perform the capitalization and stripping. The trie function attempts to greedily accept just one root. If it cannot accept any root, it returns an invalid root.
 
+Special consideration must be made for certain finals like binary and hex, since they can be ambiguous. Binary converts to BINRY, which looks a lot like BIN for bi-un. To alleviate this there are additional checks for length of the remaining string to see of there is enough space to expect the rest of the root, RY for binary's case.
+
 The trie used in the algorithm is described in [basetrie](basetrie).
+
+Overall the algorithm has a lookahead of 1 character as well as the length remaining in the string, with a time complexity of O(2n) since it has to compute the length of the string, and actually parse it. As for space complexity, it's O(1). When considering the element reconstruction with the stack, the space complexity is not exactly O(n), as each character does not have a 1 to 1 correspondance with the roots. Instead it's somewhere more like O(n/3).
 
 
 ## Usage rights
