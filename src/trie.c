@@ -160,10 +160,12 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
         switch (POP()) {
         case 'C':
             switch (PEEK()) {
-            // there is technically an ambiguity of decimal and decamal
-            // however, decamal is nonstandard (10 * 7, instead of maldeca 7 * 10)
             case 'M':
-                ECHAIN(EXPECT('L'), DECIMAL);
+                // Solves decamal being parsed as decimal word-medial
+                AFINAL(2,
+                    ECHAIN(EXPECT('L'), DECIMAL),
+                    ACCEPT(DECA)
+                );
             default:
                 ACCEPT(DECA);
             }
