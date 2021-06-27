@@ -70,4 +70,7 @@ int element_length(enum ELEMENT_VALUE ev);
 // Returns a single character for an element value, '\0' if there isn't a valid one
 char short_code(enum ELEMENT_VALUE ev);
 
+// Returns the numeric value of a base element
+int element_value_numeric(enum ELEMENT_VALUE ev);
+
 #endif

@@ -42,11 +42,25 @@ int main(int argc, char *argv[]) {
         struct element_list_s *el;
         char *str;
         el = elist_from_base_name(argv[i]);
-        str = elist_hyphenated(el);
-        printf("%s\n", str);
-        elist_free(el);
-        free(str);
+        if (el) {
+            str = elist_hyphenated(el);
+            printf("%s\n", str);
+            elist_free(el);
+            free(str);
+        } else {
+            printf("Could not parse base name '%s'.\n", argv[i]);
+        }
 #elif defined(PARSE)
+        struct element_list_s *el;
+        int value;
+        el = elist_from_base_name(argv[i]);
+        if (el) {
+            value = elist_accumulate(el);
+            printf("%i\n", value);
+            elist_free(el);
+        } else {
+            printf("Could not parse base name '%s'.\n", argv[i]);
+        }
 #endif
     }
 

@@ -23,6 +23,10 @@ void elist_append(struct element_list_s *el, enum ELEMENT_VALUE value);
 void elist_append_with_favor(struct element_list_s *el, enum ELEMENT_VALUE value);
 
 
+// Convert an element list into its integer equivalent
+int elist_accumulate(struct element_list_s *el);
+
+
 // Create a compact representation for a elist
 // in the form: 1_8_2_7 for unoctobiseptimal (113)
 // User must free

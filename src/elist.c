@@ -39,6 +39,34 @@ void elist_append_with_favor(struct element_list_s *el, enum ELEMENT_VALUE value
     elist_append(el, value);
 }
 
+
+
+int accumulate(struct element_list_s *el, int *index) {
+    int accumulator = 1;
+    while (((*index)--) != 0) {
+        enum ELEMENT_VALUE ev = el->elements[*index];
+        if (ev == ELEMENT_VALUE_UN) {
+            accumulator++;
+        } else if (ev == ELEMENT_VALUE_HEN) {
+            accumulator++;
+            return accumulator;
+        } else if (ev == ELEMENT_VALUE_SNA) {
+            accumulator *= accumulate(el, index);
+        } else {
+            accumulator *= element_value_numeric(ev);
+        }
+    }
+
+    return accumulator;
+}
+
+int elist_accumulate(struct element_list_s *el) {
+    int index = el->element_count;
+    return accumulate(el, &index);
+}
+
+
+
 #define max(n, m) (((n) > (m)) ? (n) : (m))
 
 char *elist_numeric(struct element_list_s *el) {

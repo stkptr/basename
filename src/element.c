@@ -293,8 +293,6 @@ char short_code(enum ELEMENT_VALUE ev) {
     }
 }
 
-#undef RET
-
 enum ELEMENT_VALUE pair_favor(enum ELEMENT_VALUE first, enum ELEMENT_VALUE last) {
     // io = io, ie = ie, ii = i, iu = i
     // ao = o,  ae = e,  ai = i, au = u
@@ -318,3 +316,52 @@ enum ELEMENT_VALUE pair_favor(enum ELEMENT_VALUE first, enum ELEMENT_VALUE last)
         return ELEMENT_VALUE_PREFER_NEITHER;
     }
 }
+
+
+int element_value_numeric(enum ELEMENT_VALUE ev) {
+    switch (ev) {
+        RET(INVALID, 0);
+        //
+        RET(NEGA, -1);
+            //RET(VOT, 3);
+        //
+        RET(NULLARY, 0);
+        RET(UNARY, 1);          //RET(UN, 2);
+            //RET(HEN, 3);
+            //RET(SNA, 3);
+        RET(BINARY, 2);         RET(BI, 2);
+        RET(TRINARY, 3);        RET(TRI, 3);
+        RET(QUATERNARY, 4);     RET(TETRA, 4);
+        RET(QUINARY, 5);        RET(PENTA, 5);
+        RET(SEXIMAL, 6);        RET(HEXA, 6);
+        RET(SEPTIMAL, 7);       RET(HEPTA, 7);
+        RET(OCTAL, 8);          RET(OCTO, 8);
+        RET(NONARY, 9);         RET(ENNA, 9);
+        RET(DECIMAL, 10);
+            RET(DECA, 10);
+            RET(GESIMAL, 10);
+        RET(ELEVENARY, 11);      RET(LEVA, 11);
+        RET(DOZENAL, 12);        RET(DOZA, 12);
+        RET(BAKERS_DOZENAL, 13);
+            RET(BAKER, 13);
+            RET(KERS_DOZENAL, 13);
+        //
+        RET(HEX, 16);           RET(TESSER, 16);
+        RET(SUBOPTIMAL, 17);    RET(MAL, 17);
+        //
+        RET(VIGESIMAL, 20);     RET(ICOSI, 20);
+        //
+        RET(NIFTIMAL, 36);      RET(FETA, 36);
+        //
+        RET(CENTESIMAL, 100);   RET(HECTO, 100);
+        //
+            //RET(NARY, 4);           RET(ARY, 3);
+            //RET(IMAL, 4);           RET(AL, 2);
+        //
+        default: return 0;
+    }
+
+    return 0;
+}
+
+#undef RET
