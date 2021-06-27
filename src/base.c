@@ -219,6 +219,7 @@ void test_trie(const char *name) {
 
     if (el) {
         str = elist_hyphenated(el);
+        elist_free(el);
         printf("%s\n", str);
         free(str);
     } else {
