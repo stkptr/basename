@@ -77,7 +77,7 @@ Special consideration must be made for certain finals like binary and hex, since
 
 The trie used in the algorithm is described in [basetrie](basetrie).
 
-Overall the algorithm has a lookahead of 1 character as well as the length remaining in the string, with a time complexity of O(2n) since it has to compute the length of the string, and actually parse it. As for space complexity, it's O(1). When considering the element reconstruction with the stack, the space complexity is not exactly O(n), as each character does not have a 1 to 1 correspondance with the roots. Instead it's somewhere more like O(n/3).
+Overall the algorithm has a lookahead of 1 character as well as the length remaining in the string, with a time complexity of O(2n) since it has to compute the length of the string, and actually parse it. As for space complexity, it's O(1). When considering the element reconstruction with the stack, the space complexity is not exactly O(n), as each character does not have a 1 to 1 correspondance with the roots. Instead it's somewhere more like O(n/3). In short: time O(n), space O(1), or O(n) with a stack.
 
 
 ## Usage rights
