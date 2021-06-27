@@ -90,6 +90,8 @@ int expect(const char *string, int *index, int *sindex, char expected) {
 #define ERROR() ACCEPT(INVALID)
 #define ECHAIN_NP(e, a) if (e) {ACCEPT(a);} else {ERROR();}
 #define ECHAIN(e, a) POP(); ECHAIN_NP(e, a)
+// For ambiguous finals
+#define AFINAL(r, e, d) if (length - *sindex == r) {e;} else {d;}
 
 // The hardcoded trie
 enum ELEMENT_VALUE parse_element(const char *string, int *index,
@@ -103,12 +105,11 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
             switch (PEEK()) {
             case 'N': // BINRY
                 // solves the bi-un ambiguity
-                if (length - *sindex == 3) {
+                AFINAL(3,
                     ECHAIN(EXPECT('R') && EXPECT('Y'),
-                        BINARY);
-                } else {
-                    ACCEPT(BI);
-                }
+                        BINARY),
+                    ACCEPT(BI)
+                );
             default: // BI
                 ACCEPT(BI);
             }
@@ -118,13 +119,12 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
                 switch (PEEK()) {
                 case 'S':
                     // solves the bakersuboptimal ambiguity
-                    if (length - *sindex == 5) {
+                    AFINAL(5,
                         ECHAIN(EXPECT('D') && EXPECT('Z')
                                && EXPECT('N') && EXPECT('L'),
-                            BAKERS_DOZENAL);
-                    } else {
-                        ACCEPT(BAKER);
-                    }
+                            BAKERS_DOZENAL),
+                        ACCEPT(BAKER)
+                    );
                 default:
                     ACCEPT(BAKER);
                 }
@@ -141,11 +141,10 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
             switch(PEEK()) {
             case 'L':
                 // solves the octelevenary ambiguity
-                if (length - *sindex == 1) {
-                    PACCEPT(OCTAL);
-                } else {
-                    ACCEPT(OCTO);
-                }
+                AFINAL(1,
+                    PACCEPT(OCTAL),
+                    ACCEPT(OCTO)
+                );
             default:
                 ACCEPT(OCTO);
             }
@@ -172,11 +171,10 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
             switch (PEEK()) {
             case 'N':
                 // Solves the dozenal and doza-un ambiguity
-                if (length - *sindex == 2) {
-                    ECHAIN(EXPECT('L'), DOZENAL);
-                } else {
-                    ACCEPT(DOZA);
-                }
+                AFINAL(2,
+                    ECHAIN(EXPECT('L'), DOZENAL),
+                    ACCEPT(DOZA)
+                );
             default:
                 ACCEPT(DOZA);
             }
@@ -220,11 +218,10 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
             switch (PEEK()) {
             case 'N':
                 // Solves the leva-un ambiguity
-                if (length - *sindex == 3) {
-                    ECHAIN(EXPECT('R') && EXPECT('Y'), ELEVENARY);
-                } else {
-                    ACCEPT(LEVA);
-                }
+                AFINAL(3,
+                    ECHAIN(EXPECT('R') && EXPECT('Y'), ELEVENARY),
+                    ACCEPT(LEVA)
+                );
             default:
                 ACCEPT(LEVA);
             }
@@ -238,9 +235,13 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
     case 'N':
         switch (PEEK()) {
         case 'F':
-            ECHAIN(EXPECT('T') && EXPECT('M')
-                   && EXPECT('L'),
-                NIFTIMAL);
+            // FIXME: unfetun hangs, likely a pop issue
+            AFINAL(4,
+                ECHAIN(EXPECT('T') && EXPECT('M')
+                       && EXPECT('L'),
+                    NIFTIMAL),
+                ACCEPT(UN)
+            );
         case 'G':
             // check if at beginning, since nega is strictly a prefix
             // otherwise there would be word-medial ambiguity
@@ -250,9 +251,13 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
             if (*sindex == 1)
                 PACCEPT(NEGA);
         case 'L':
-            ECHAIN(EXPECT('L') && EXPECT('R')
-                   && EXPECT('Y'),
-                NULLARY);
+            // un-leva clashes with nullary
+            AFINAL(4,
+                ECHAIN(EXPECT('L') && EXPECT('R')
+                       && EXPECT('Y'),
+                    NULLARY),
+                ACCEPT(UN)
+            );
         case 'N':
             POP();
             switch (PEEK()) {
@@ -324,11 +329,10 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
             switch (PEEK()) {
             case 'N':
                 // this solves the TRI-UN and TRINARY ambiguity
-                if (length - *sindex == 3) {
-                    ECHAIN(EXPECT('R') && EXPECT('Y'), TRINARY);
-                } else {
-                    ACCEPT(TRI);
-                }
+                AFINAL(3,
+                    ECHAIN(EXPECT('R') && EXPECT('Y'), TRINARY),
+                    ACCEPT(TRI)
+                );
             default:
                 ACCEPT(TRI);
             }
