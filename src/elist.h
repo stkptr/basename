@@ -26,11 +26,11 @@ void elist_append_with_favor(struct element_list_s *el, enum ELEMENT_VALUE value
 // Create a compact representation for a elist
 // in the form: 1_8_2_7 for unoctobiseptimal (113)
 // User must free
-char *elist_str(struct element_list_s *el);
+char *elist_numeric(struct element_list_s *el);
 
 // Create a hyphenated name
 // User must free
-char *elist_hyphen(struct element_list_s *el);
+char *elist_hyphenated(struct element_list_s *el);
 
 // Names the elist el according to the vowel ommitting rules
 // el MUST have the preference values between each element

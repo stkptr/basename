@@ -41,7 +41,7 @@ void elist_append_with_favor(struct element_list_s *el, enum ELEMENT_VALUE value
 
 #define max(n, m) (((n) > (m)) ? (n) : (m))
 
-char *elist_str(struct element_list_s *el) {
+char *elist_numeric(struct element_list_s *el) {
     size_t count = el->element_count * 4 + 1;
     char *str = calloc(count, sizeof(char));
     int written = 0;
@@ -59,7 +59,7 @@ char *elist_str(struct element_list_s *el) {
 }
 
 
-char *elist_hyphen(struct element_list_s *el) {
+char *elist_hyphenated(struct element_list_s *el) {
     // maximum medial element length is 6, except for bakers which is 13 (nice), add one for the hyphen
     // maximum final is 10, except for bakers which is 15
     // +1 for the nul, of course

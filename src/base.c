@@ -111,7 +111,7 @@ void test_elist() {
         elist_append(el, ev[i]);
     }
 
-    str = elist_str(el);
+    str = elist_numeric(el);
 
     printf("Elist: %s\n", str);
 
@@ -187,7 +187,7 @@ void test_construct() {
 
         printf("%i\n", values[vi]);
 
-        str = elist_str(el);
+        str = elist_numeric(el);
 
         printf("  Roots: ");
 
@@ -218,7 +218,7 @@ void test_trie(const char *name) {
     el = elist_from_base_name(name);
 
     if (el) {
-        str = elist_hyphen(el);
+        str = elist_hyphenated(el);
         printf("%s\n", str);
         free(str);
     } else {
