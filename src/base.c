@@ -1,16 +1,9 @@
 #include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
 
+#include "base.h"
 #include "element.h"
 #include "elist.h"
 #include "trie.h"
-
-
-struct pair_s {
-    int lower;
-    int upper;
-};
 
 
 // Checks if n is an integer
@@ -30,7 +23,7 @@ struct pair_s rearrange(struct pair_s s) {
     return s;
 }
 
-// Returns the closest factors for n
+
 struct pair_s factorize(int n) {
     // no integer n has a divisor that is ceil(sqrt(n))
     // and all divisors are obtained from floor(sqrt(n)) or less
@@ -50,14 +43,6 @@ struct pair_s factorize(int n) {
     s = rearrange(s);
 
     return s;
-}
-
-
-void test_factor() {
-    for (int i = 1; i < 25; i++) {
-        struct pair_s s = factorize(i);
-        printf("%i: %i %i %s\n", i, s.lower, s.upper, (s.lower == 1) ? "prime" : "compound");
-    }
 }
 
 
@@ -91,32 +76,6 @@ int is_base_case(int n) {
         default:
             return 0;
     }
-}
-
-
-void test_elist() {
-    enum ELEMENT_VALUE ev[] = {
-        ELEMENT_VALUE_CENTESIMAL,
-        ELEMENT_VALUE_NULLARY,
-        ELEMENT_VALUE_UN,
-        ELEMENT_VALUE_INVALID,
-        ELEMENT_VALUE_SEXIMAL,
-        ELEMENT_VALUE_VOT,
-        ELEMENT_VALUE_SUBOPTIMAL
-    };
-    struct element_list_s *el = elist_new();
-    char *str;
-
-    for (int i = 0; i < sizeof(ev) / sizeof(enum ELEMENT_VALUE); i++) {
-        elist_append(el, ev[i]);
-    }
-
-    str = elist_numeric(el);
-
-    printf("Elist: %s\n", str);
-
-    free(str);
-    elist_free(el);
 }
 
 
@@ -176,60 +135,6 @@ void construct(struct element_list_s *el, int n, int is_final, int depth) {
 }
 
 
-void test_construct() {
-    int values[] = {1, 2, 81, 9023, -5758, 8891, 8213};
-
-    for (int vi = 0; vi < sizeof(values) / sizeof(int); vi++) {
-        struct element_list_s *el = elist_new();
-        char *str;
-
-        construct(el, values[vi], 1, 0);
-
-        printf("%i\n", values[vi]);
-
-        str = elist_numeric(el);
-
-        printf("  Roots: ");
-
-        for (int i = 0; i < el->element_count; i++) {
-            enum ELEMENT_VALUE ev = el->elements[i];
-            const char *s = element_as_string(ev);
-            if (!element_value_is_preference(ev)) {
-                printf("%s ", s);
-            }
-        }
-
-        printf("\n");
-
-        char *shortcode = elist_shortcode(el, 1);
-        printf("  Shortcode: %s\n", shortcode);
-        free(shortcode);
-
-        printf("  Numeric: %s\n", str);
-        elist_free(el);
-    }
-}
-
-
-void test_trie(const char *name) {
-    struct element_list_s *el;
-    char *str;
-
-    el = elist_from_base_name(name);
-
-    if (el) {
-        str = elist_hyphenated(el);
-        elist_free(el);
-        printf("%s\n", str);
-        free(str);
-    } else {
-        printf("String '%s' could not be parsed.\n", name);
-    }
-}
-
-
-// Name the integral base n
-// User must free
 char *name(int n) {
     struct element_list_s *el = elist_new();
     char *str;
@@ -237,32 +142,4 @@ char *name(int n) {
     str = elist_name(el);
     elist_free(el);
     return str;
-}
-
-
-void print_help(const char *program_name) {
-    printf(
-        "Usage: %s [base...]\n"
-        "\n"
-        "Convert decimal base numbers into jan Misali style base names\n",
-        program_name);
-}
-
-
-int main(int argc, char *argv[]) {
-    // help
-    for (int i = 1; i < argc; i++) {
-        if (argv[i][0] == '-' && argv[i][1] == 'h') {
-            print_help(argv[0]);
-            exit(0);
-        }
-    }
-
-    for (int i = 1; i < argc; i++) {
-        char *str = name(atoi(argv[i]));
-        printf("%s\n", str);
-        free(str);
-    }
-
-    return 0;
 }
