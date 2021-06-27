@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "base.h"
-
-#if defined(HYPHEN) || defined(PARSE)
+#if defined(NAME)
+    #include "base.h"
+#elif defined(HYPHEN) || defined(PARSE)
     #include "elist.h"
     #include "trie.h"
 #endif
