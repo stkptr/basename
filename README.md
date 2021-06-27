@@ -33,6 +33,14 @@ The general operation is as follows, for base *n*:
 2. Factorize *n*, choosing the two factors which are closest
 3. Recurse for each factor
 
+The actual algorithm used is:
+
+1. If *n* is a simple factor—one that has a defined root—return the root
+2. Assign *s* as *floor(sqrt(n))*
+3. Attempt to divide *n* by *s*
+    - If it is divisible, return *s* and *n / s*
+    - Otherwise, decrement s and retry
+
 While *n* is decomposed into roots there are medial elements that are added.
 These dictate how vowel reduction will be performed.
 
@@ -53,19 +61,24 @@ For any name *n'*:
 2. Initialize an accumulator *a* with 1
 3. Starting at the final root, perform the following:
     - If the root is sna, recurse (to step number 2)
-    - If the root is hen, add 1 to the accumulator and return
-    - If the root is un, add 1 to the accumulator
-    - Otherwise, multiply the accumulator with the root
+    - If the root is hen, add 1 to *a* and return *a*
+    - If the root is un, add 1 to *a*
+    - Otherwise, multiply *a* by the root's value
+4. Return *a*
 
 ### Parsing names
 
 Parsing a name into roots is required for two of the three programs. For any name *n'*:
 
 1. Convert *n'* into uppercase, stripping all non-alphabetic characters, as well as AEOU, and I not preceded by B
+2. Initialize *s* as a stack
 2. For each character in *n'*
     1. Add character to an internal string
-    2. Attempt to index a precomputed trie, if accepts return the value, otherwise continue
+    2. Attempt to index a precomputed trie
+        - if it accepts push the value onto *s*
+        - otherwise continue
     3. If the string is an impossible index, throw an error
+3. Return *s*
 
 Removing vowels (except for I preceded by B) prevents vowel reduction from interfering with parsing. I preceded by B is kept to parse `biker's dozenal`.
 
