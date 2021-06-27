@@ -13,7 +13,11 @@ def generate_line(base):
     gname = cmd(name, str(base))
     ghyphen = cmd(hyphenate, gname)
     gparse = cmd(parse, gname)
-    return f"{base}\t{gname}\t{ghyphen}\t{gparse}"
+    return gname, ghyphen, gparse
+
+
+def is_erroneous(base, gname, ghyphen, gparse):
+    return str(base) != gparse or ghyphen.startswith("Could not")
 
 
 if __name__ == "__main__":
@@ -23,7 +27,11 @@ if __name__ == "__main__":
         help="Start of the range")
     parser.add_argument("--end", "-e", type=int, default=10,
         help="End of the range (inclusive)")
+    parser.add_argument("--only-errors", "-o", action="store_true",
+        help="Only print erroneous results")
     args = parser.parse_args()
 
     for i in range(args.start, args.end + 1):
-        print(generate_line(i))
+        v = generate_line(i)
+        if (args.only_errors and is_erroneous(i, *v)) or not args.only_errors:
+            print("{}\t{}\t{}\t{}".format(i, *v))
