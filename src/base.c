@@ -8,7 +8,16 @@
 
 // Checks if n is an integer
 int integral(double n) {
-    return ceil(n) == n;
+    // if we cast n to an integer, we perform a floor
+    // n will always be equal to or greater than floor(n) of course
+    // thus we can check if it is near enough to an integer (float precision error) with
+    // n - floor(n) < t
+    // with t being a threshold
+    //
+    // however, this checks after division, which does not have accumulation errors
+    // so we can check if floor(n) == n, with a cast of the floor to double
+    // the cast adds any error that would be present
+    return (double)((int)n) == n;
 }
 
 
@@ -27,22 +36,22 @@ struct pair_s rearrange(struct pair_s s) {
 struct pair_s factorize(int n) {
     // no integer n has a divisor that is ceil(sqrt(n))
     // and all divisors are obtained from floor(sqrt(n)) or less
-    int fsquare = floor(sqrt(n));
-    double d = fsquare + 1;
-    struct pair_s s;
+    // floor is automatically performed with int casting
+    int s = sqrt(n) + 1;
+    struct pair_s p;
     double f;
 
     do {
-        d--;
-        f = (double)n / d;
+        s--;
+        f = (double)n / s;
     } while (!integral(f));
 
-    s.lower = f;
-    s.upper = d;
+    p.lower = s;
+    p.upper = f;
 
-    s = rearrange(s);
+    p = rearrange(p);
 
-    return s;
+    return p;
 }
 
 
