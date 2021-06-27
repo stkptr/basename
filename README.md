@@ -117,7 +117,7 @@ A sqrt of a sqrt doubles the degree.
 
 *i = root(2<sup>1</sup>, n) × 2<sup>0</sup> + root(2<sup>2</sup>, n) × 2<sup>1</sup> + root(2<sup>3</sup>, n) × 2<sup>2</sup>...*
 
-For the purposes of complexity analysis, we can ignore roots with lesser results than the greatest.
+For the purposes of complexity analysis, we can ignore roots with lesser results than the greatest. As for increasing values of *n*, the proportion that the lesser roots contributes decreases. One can see this in action by `diff = lambda n: (complexity(n) - sqrt(n)) / complexity(n)` for various values if *n*.
 
 *i ≃ sqrt(n)*
 
