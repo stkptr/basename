@@ -97,7 +97,7 @@ The trie used in the algorithm is described in [basetrie](basetrie).
 
 TL;DR: best case O(1), worst case O(sqrt(n)), with recursion being near O(sqrt(n))
 
-The factorizer makes use of the fact that *ceil(sqrt(n))* is equal or greater to the largest lower factor for *n*. In other words, it is very close to the closest factors of *n*.
+The factorizer makes use of the fact that *floor(sqrt(n))* is equal or greater to the largest lower factor for *n*. In other words, it is very close to the closest factors of *n*.
 
 For *n* of 100, the root is 10. There are higher factors, like 20, but 20 is used in *5x20*, and 5 is less than 10.
 
@@ -107,12 +107,12 @@ When used to factor to the roots we can approximate the amount of operations req
 
 ```python
 def complexity(n):
-    n = math.ceil(math.sqrt(n)) # initial
+    n = math.floor(math.sqrt(n)) # initial
     i = n # we just performed n operations
     p = 2 # the amount of recursive calls done in this step
-    # math.ceil(sqrt(...)) eventually reaches 2
-    while n != 2:
-        n = math.ceil(math.sqrt(n)) # the next operation count
+    # math.floor(sqrt(...)) eventually reaches 1
+    while n != 1:
+        n = math.floor(math.sqrt(n)) # the next operation count
         i += n * p # multiply the operations by the amount of recursions
         p *= 2 # double the recursions, since there are 2 recursions per step
     return i
@@ -120,9 +120,9 @@ def complexity(n):
 
 This is a geometric series of:
 
-*i = ceil(sqrt(n)) × 2<sup>0</sup> + ceil(sqrt(ceil(sqrt(n)))) × 2<sup>1</sup> + ceil(sqrt(ceil(sqrt(ceil(sqrt(n)))))) × 2<sup>2</sup>...*
+*i = floor(sqrt(n)) × 2<sup>0</sup> + floor(sqrt(floor(sqrt(n)))) × 2<sup>1</sup> + floor(sqrt(floor(sqrt(floor(sqrt(n)))))) × 2<sup>2</sup>...*
 
-Ignoring the ceil for practicality:
+Ignoring the floor for practicality:
 
 *i = sqrt(n) × 2<sup>0</sup> + sqrt(sqrt(n)) × 2<sup>1</sup> + sqrt(sqrt(sqrt(n))) × 2<sup>2</sup>...*
 
@@ -130,7 +130,7 @@ A sqrt of a sqrt doubles the degree.
 
 *i = root(2<sup>1</sup>, n) × 2<sup>0</sup> + root(2<sup>2</sup>, n) × 2<sup>1</sup> + root(2<sup>3</sup>, n) × 2<sup>2</sup>...*
 
-For the purposes of complexity analysis, we can ignore roots with lesser results than the greatest. As for increasing values of *n*, the proportion that the lesser roots contributes decreases. One can see this in action by `diff = lambda n: (complexity(n) - sqrt(n)) / complexity(n)` for various values of *n*.
+For the purposes of complexity analysis, we can ignore roots with lesser results than the greatest. As for increasing values of *n*, the proportion that the lesser roots contributes decreases. One can see this in action by `diff = lambda n: (complexity(n) - math.sqrt(n)) / complexity(n)` for various values of *n*.
 
 *i ≃ sqrt(n)*
 
