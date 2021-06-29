@@ -379,9 +379,15 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
         }
     // last bit for unniftimal
     case 'I':
-        ECHAIN_NP(EXPECT('F') && EXPECT('T')
-                  && EXPECT('M') && EXPECT('L'),
-            NIFTIMAL);
+        // pop for snicosi
+        switch (POP()) {
+            case 'F':
+                ECHAIN_NP(EXPECT('T')
+                          && EXPECT('M') && EXPECT('L'),
+                    NIFTIMAL);
+            case 'C':
+                ECHAIN_NP(EXPECT('S'), ICOSI);
+        }
     // unhandled vowel
     case 'E':
         ACCEPT(NONE);
