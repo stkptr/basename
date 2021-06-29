@@ -34,8 +34,9 @@ if __name__ == "__main__":
         help="How often to update the progress number, 0 to disable")
     args = parser.parse_args()
 
+    # initial newline to prevent the progress from overwriting text
     if args.update_interval:
-        print()
+        print(file=sys.stderr)
 
     for i in range(args.start, args.end + 1):
         v = generate_line(i)
@@ -43,4 +44,4 @@ if __name__ == "__main__":
             print("{}\t{}\t{}\t{}".format(i, *v))
 
         if args.update_interval and i % args.update_interval == 0:
-            print(f"\033[F{i}", file=sys.stderr)
+            print(f"\033[F{i} ({i / args.end * 100:.2f}%)", file=sys.stderr)
