@@ -34,14 +34,21 @@ if __name__ == "__main__":
         help="How often to update the progress number, 0 to disable")
     args = parser.parse_args()
 
+    errors = 0
+
     # initial newline to prevent the progress from overwriting text
     if args.update_interval:
         print(file=sys.stderr)
 
     for i in range(args.start, args.end + 1):
         v = generate_line(i)
-        if (args.only_errors and is_erroneous(i, *v)) or not args.only_errors:
+        is_error = is_erroneous(i, *v)
+        errors += int(is_error)
+        if (args.only_errors and is_error) or not args.only_errors:
             print("{}\t{}\t{}\t{}".format(i, *v))
 
         if args.update_interval and i % args.update_interval == 0:
             print(f"\033[F{i} ({i / args.end * 100:.2f}%)", file=sys.stderr)
+
+    print(f"Checked {args.end + 1} bases, with {errors} errors"
+           + f" ({errors / (args.end + 1) * 100:.2f}% erroneous)", file=sys.stderr)
