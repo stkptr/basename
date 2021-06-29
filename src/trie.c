@@ -13,6 +13,13 @@ char upper(char ch) {
     return ch;
 }
 
+#define VOWEL(current, previous) case current:\
+    if (*index > 1 && upper(string[*index - 2]) == previous) {\
+        (*sindex)++;\
+        return ch;\
+    }\
+    break;
+
 // sindex holds the amount of characters that were actually considered
 char get_next_c(const char *string, int *index, int *sindex) {
     for (;;) {
@@ -21,12 +28,7 @@ char get_next_c(const char *string, int *index, int *sindex) {
             case '\0':
                 (*index)--; // adjust so that string[index] == '\0'
                 return '\0';
-            case 'I':
-                if (*index > 1 && string[*index - 2] == 'b') {
-                    (*sindex)++;
-                    return ch;
-                }
-                break;
+            VOWEL('I', 'B');
             case 'B':
             case 'C':
             case 'D':
