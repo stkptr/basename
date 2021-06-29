@@ -13,12 +13,11 @@ char upper(char ch) {
     return ch;
 }
 
-#define VOWEL(current, previous) case current:\
+#define VOWEL(previous) \
     if (*index > 1 && upper(string[*index - 2]) == previous) {\
         (*sindex)++;\
         return ch;\
-    }\
-    break;
+    }
 
 // sindex holds the amount of characters that were actually considered
 char get_next_c(const char *string, int *index, int *sindex) {
@@ -28,8 +27,13 @@ char get_next_c(const char *string, int *index, int *sindex) {
             case '\0':
                 (*index)--; // adjust so that string[index] == '\0'
                 return '\0';
-            VOWEL('I', 'B');
-            VOWEL('E', 'N');
+            case 'I':
+                VOWEL('B');
+                VOWEL('N');
+                break;
+            case 'E':
+                VOWEL('N');
+                break;
             case 'B':
             case 'C':
             case 'D':
@@ -239,11 +243,11 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
     // N, niftimal, nega, nullary, nonary, enna, unary, un
     case 'N':
         switch (PEEK()) {
-        case 'F':
+        case 'I':
             // FIXME: unfetun hangs, likely a pop issue
-            AFINAL(4,
-                ECHAIN(EXPECT('T') && EXPECT('M')
-                       && EXPECT('L'),
+            AFINAL(5,
+                ECHAIN(EXPECT('F') && EXPECT('T')
+                       && EXPECT('M') && EXPECT('L'),
                     NIFTIMAL),
                 ACCEPT(UN)
             );
@@ -271,6 +275,9 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
             // However, this is nonstandard (compare ennaker's dozenal NNKRSDZNL)
             case 'R':
                 ECHAIN(EXPECT('Y'), NONARY);
+            // unniftimal
+            case 'I':
+                ACCEPT(UN);
             default:
                 ACCEPT(ENNA);
             }
@@ -363,6 +370,11 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
         default:
             ERROR();
         }
+    // last bit for unniftimal
+    case 'I':
+        ECHAIN_NP(EXPECT('F') && EXPECT('T')
+                  && EXPECT('M') && EXPECT('L'),
+            NIFTIMAL);
     default:
         ERROR();
     }
