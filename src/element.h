@@ -3,6 +3,7 @@
 
 enum ELEMENT_VALUE {
     ELEMENT_VALUE_INVALID = 999,
+    ELEMENT_VALUE_NONE = 888,
 
     // Special prefixes
     ELEMENT_VALUE_NEGA = -1, // * -1

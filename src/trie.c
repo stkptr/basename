@@ -382,6 +382,9 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
         ECHAIN_NP(EXPECT('F') && EXPECT('T')
                   && EXPECT('M') && EXPECT('L'),
             NIFTIMAL);
+    // unhandled vowel
+    case 'E':
+        ACCEPT(NONE);
     default:
         ERROR();
     }
@@ -397,7 +400,9 @@ struct element_list_s *elist_from_base_name(const char *name) {
     enum ELEMENT_VALUE ev;
 
     while ((ev = parse_element(name, &index, &sindex, length)) != ELEMENT_VALUE_INVALID) {
-        elist_append(el, ev);
+        if (ev != ELEMENT_VALUE_NONE) {
+            elist_append(el, ev);
+        }
     }
 
     // still stuff left to parse, the string must have been nonconformant
