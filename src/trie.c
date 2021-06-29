@@ -248,7 +248,7 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
             switch (PEEK()) {
             // FIXME: unfetun hangs, likely a pop issue
                 case 'F':
-                    AFINAL(5,
+                    AFINAL(4,
                         ECHAIN(EXPECT('T') && EXPECT('M')
                                && EXPECT('L'),
                             NIFTIMAL),
