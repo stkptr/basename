@@ -29,6 +29,7 @@ char get_next_c(const char *string, int *index, int *sindex) {
                 (*index)--; // adjust so that string[index] == '\0'
                 return '\0';
             VOWEL('I', 'B');
+            VOWEL('E', 'N');
             case 'B':
             case 'C':
             case 'D':
@@ -275,6 +276,9 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
             }
         case 'R':
             ECHAIN(EXPECT('Y'), UNARY);
+        // unenna
+        case 'E':
+            PACCEPT(UN);
         default:
             ACCEPT(UN);
         }
