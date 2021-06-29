@@ -244,13 +244,20 @@ enum ELEMENT_VALUE parse_element(const char *string, int *index,
     case 'N':
         switch (PEEK()) {
         case 'I':
+            POP();
+            switch (PEEK()) {
             // FIXME: unfetun hangs, likely a pop issue
-            AFINAL(5,
-                ECHAIN(EXPECT('F') && EXPECT('T')
-                       && EXPECT('M') && EXPECT('L'),
-                    NIFTIMAL),
-                ACCEPT(UN)
-            );
+                case 'F':
+                    AFINAL(5,
+                        ECHAIN(EXPECT('T') && EXPECT('M')
+                               && EXPECT('L'),
+                            NIFTIMAL),
+                        ACCEPT(UN)
+                    );
+                // fix for unicosi
+                case 'C':
+                    ACCEPT(UN);
+            }
         case 'G':
             // check if at beginning, since nega is strictly a prefix
             // otherwise there would be word-medial ambiguity
